@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Build output
+dist/
+dist-ssr/
+build/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Environment files (contain secrets)
+.env
+.env.local
+.env.*.local
+
+# Frontend env (holds VITE_ config)
+frontend/.env
+frontend/.env.local
+
+# Deployment / tooling
+.vercel
+*.tsbuildinfo
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Local agent/tool config
+.kilo/
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
