@@ -14,12 +14,17 @@ router = APIRouter(prefix="/api/stats", tags=["public-stats"])
 @limiter.limit(settings.api_rate_limit)
 async def summary(request: Request):
     papers, papers_total = await select_rows(
-        "papers", select="id,download_count", params={"status": "eq.published"}
+        "papers",
+        select="id,download_count",
+        params={"status": "eq.published"},
+        count=True,
     )
     institutions, inst_total = await select_rows(
-        "institutions", select="id"
+        "institutions", select="id,type", count=True
     )
-    branches, branch_total = await select_rows("branches", select="id")
+    branches, branch_total = await select_rows(
+        "branches", select="id", count=True
+    )
 
     total_downloads = sum(p.get("download_count") or 0 for p in papers)
     universities = sum(
