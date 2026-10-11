@@ -1,9 +1,9 @@
 """Server-side Supabase JWT verification + admin role checks.
 
 Verification order:
-1. RS256 tokens (newer Supabase projects) — verified against the
-   project JWKS endpoint (cached).
-2. HS256 tokens (older projects) — verified with SUPABASE_JWT_SECRET.
+1. RS256 tokens — verified against the project JWKS endpoint (cached).
+2. ES256 tokens (Supabase default for newer projects) — same JWKS, EC keys.
+3. HS256 tokens (older projects) — verified with SUPABASE_JWT_SECRET.
 """
 from __future__ import annotations
 
@@ -33,12 +33,10 @@ def _fetch_jwks() -> list:
     return keys
 
 
-def _rsa_public_key(kid: str) -> Any:
-    from jwt.algorithms import RSAAlgorithm
-
+def _public_key(kid: Optional[str], algorithm_class: Any) -> Any:
     for key in _fetch_jwks():
         if key.get("kid") == kid:
-            return RSAAlgorithm.from_jwk(key)
+            return algorithm_class.from_jwk(key)
     raise jwt.InvalidKeyError(f"No JWKS key matching kid={kid}")
 
 
@@ -48,7 +46,13 @@ def verify_supabase_token(token: str) -> Dict[str, Any]:
     alg = header.get("alg", "")
 
     if alg == "RS256":
-        key = _rsa_public_key(header.get("kid"))
+        from jwt.algorithms import RSAAlgorithm
+
+        key = _public_key(header.get("kid"), RSAAlgorithm)
+    elif alg == "ES256":
+        from jwt.algorithms import ECAlgorithm
+
+        key = _public_key(header.get("kid"), ECAlgorithm)
     elif alg == "HS256":
         if not settings.supabase_jwt_secret:
             raise jwt.InvalidKeyError(
@@ -65,6 +69,7 @@ def verify_supabase_token(token: str) -> Dict[str, Any]:
         algorithms=[alg],
         audience="authenticated",
         options=options,
+        leeway=10,
     )
     return payload
 
