@@ -82,12 +82,13 @@ const FAQ_TEASER = [
 
 export function Home() {
   const navigate = useNavigate();
-  const toast = useToast();
+  const { error: toastError } = useToast();
   const [query, setQuery] = useState("");
   const [summary, setSummary] = useState<Summary | null>(null);
   const [recent, setRecent] = useState<Paper[]>([]);
   const [filters, setFilters] = useState<FilterOptions | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -95,20 +96,30 @@ export function Home() {
       try {
         const [sumRes, recentRes, filterRes] = await Promise.all([
           api.get<Summary>("/api/stats/summary"),
-          api.get<{ data: Paper[] }>(
+          api.get<{ data?: Paper[] } | null>(
             "/api/papers?limit=8&sort=newest"
           ),
           api.get<FilterOptions>("/api/papers/filters"),
         ]);
         if (cancelled) return;
         setSummary(sumRes);
-        setRecent(recentRes.data);
+        // Guard: api client throws on null/HTML, but stay defensive —
+        // a null envelope must never crash on `.data`.
+        setRecent(
+          Array.isArray(recentRes?.data)
+            ? (recentRes as { data: Paper[] }).data
+            : []
+        );
         setFilters(filterRes);
+        setLoadError(null);
       } catch (e) {
         if (!cancelled) {
-          toast.error(
-            e instanceof Error ? e.message : "Failed to load data"
-          );
+          const message =
+            e instanceof Error ? e.message : "Failed to load data";
+          setSummary(null);
+          setRecent([]);
+          setLoadError(message);
+          toastError(message);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -117,7 +128,7 @@ export function Home() {
     return () => {
       cancelled = true;
     };
-  }, [toast]);
+  }, [toastError]);
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -465,11 +476,23 @@ export function Home() {
               <div className="rounded-2xl border border-dashed border-navy-200 bg-white p-12 text-center">
                 <FileText className="mx-auto h-10 w-10 text-navy-300" />
                 <p className="mt-3 font-medium text-navy-700">
-                  No papers yet — check back soon!
+                  {loadError
+                    ? "We couldn't load the latest papers."
+                    : "No papers yet — check back soon!"}
                 </p>
                 <p className="mt-1 text-sm text-navy-500">
-                  Admins upload new papers every week.
+                  {loadError
+                    ? loadError
+                    : "Admins upload new papers every week."}
                 </p>
+                {loadError && (
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 rounded-lg bg-brand-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-brand-700"
+                  >
+                    Retry
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

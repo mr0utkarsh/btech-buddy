@@ -62,7 +62,7 @@ const emptyForm: InstitutionForm = {
 };
 
 export function InstitutionsAdmin() {
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -76,16 +76,17 @@ export function InstitutionsAdmin() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api.get<{ data: Institution[] }>(
+      const res = await api.get<{ data?: Institution[] }>(
         "/api/institutions"
       );
-      setInstitutions(res.data);
+      setInstitutions(Array.isArray(res?.data) ? res.data : []);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to load");
+      setInstitutions([]);
+      toastError(e instanceof Error ? e.message : "Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [toastError]);
 
   useEffect(() => {
     load();
@@ -166,15 +167,15 @@ export function InstitutionsAdmin() {
           `/api/admin/institutions/${editing.id}`,
           payload
         );
-        toast.success("Institution updated");
+        toastSuccess("Institution updated");
       } else {
         await api.post("/api/admin/institutions", payload);
-        toast.success("Institution added");
+        toastSuccess("Institution added");
       }
       setModalOpen(false);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Save failed");
+      toastError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -184,11 +185,11 @@ export function InstitutionsAdmin() {
     if (!deleting) return;
     try {
       await api.del(`/api/admin/institutions/${deleting.id}`);
-      toast.success("Institution deleted");
+      toastSuccess("Institution deleted");
       setDeleting(null);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Delete failed");
+      toastError(e instanceof Error ? e.message : "Delete failed");
     }
   };
 

@@ -55,7 +55,7 @@ const initialForm: PaperForm = {
 
 export function UploadPaper() {
   const navigate = useNavigate();
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const fileInput = useRef<HTMLInputElement>(null);
 
   const [institutions, setInstitutions] = useState<Institution[]>([]);
@@ -73,16 +73,18 @@ export function UploadPaper() {
     (async () => {
       try {
         const [inst, br] = await Promise.all([
-          api.get<{ data: Institution[] }>("/api/institutions"),
-          api.get<{ data: Branch[] }>("/api/branches"),
+          api.get<{ data?: Institution[] }>("/api/institutions"),
+          api.get<{ data?: Branch[] }>("/api/branches"),
         ]);
-        setInstitutions(inst.data);
-        setBranches(br.data);
+        setInstitutions(Array.isArray(inst?.data) ? inst.data : []);
+        setBranches(Array.isArray(br?.data) ? br.data : []);
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Failed to load catalog");
+        setInstitutions([]);
+        setBranches([]);
+        toastError(e instanceof Error ? e.message : "Failed to load catalog");
       }
     })();
-  }, [toast]);
+  }, [toastError]);
 
   // Load subjects when branch changes.
   useEffect(() => {
@@ -91,10 +93,10 @@ export function UploadPaper() {
       return;
     }
     api
-      .get<{ data: Subject[] }>(
+      .get<{ data?: Subject[] }>(
         `/api/subjects?branch_id=${form.branch_id}`
       )
-      .then((res) => setSubjects(res.data))
+      .then((res) => setSubjects(Array.isArray(res?.data) ? res.data : []))
       .catch(() => setSubjects([]));
   }, [form.branch_id]);
 
@@ -127,7 +129,7 @@ export function UploadPaper() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
-      toast.error("Please fix the highlighted fields");
+      toastError("Please fix the highlighted fields");
       return;
     }
     setSubmitting(true);
@@ -156,14 +158,14 @@ export function UploadPaper() {
         getAdminToken(),
         setProgress
       );
-      toast.success(
+      toastSuccess(
         form.publish
           ? "Paper uploaded and published"
           : "Paper uploaded as draft"
       );
       navigate("/admin/papers");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Upload failed");
+      toastError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setSubmitting(false);
       setUploading(false);

@@ -27,9 +27,14 @@ let toastId = 0;
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const timers = useRef<Map<number, number>>(new Map());
+  // Mirror of toasts for synchronous duplicate checks (state updater
+  // functions must stay pure — no side effects inside them).
+  const toastsRef = useRef<ToastMessage[]>([]);
+  toastsRef.current = toasts;
 
   const dismiss = useCallback((id: number) => {
-    setToasts((t) => t.filter((x) => x.id !== id));
+    toastsRef.current = toastsRef.current.filter((x) => x.id !== id);
+    setToasts(toastsRef.current);
     const timer = timers.current.get(id);
     if (timer) window.clearTimeout(timer);
     timers.current.delete(id);
@@ -37,24 +42,41 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const push = useCallback(
     (type: ToastMessage["type"], message: string) => {
+      const clean = (message || "").trim() || "Something went wrong";
+      // De-duplicate: don't stack the same message repeatedly (e.g. an
+      // effect that re-runs while the backend is unreachable).
+      if (
+        toastsRef.current.some((t) => t.type === type && t.message === clean)
+      ) {
+        return;
+      }
       const id = ++toastId;
-      setToasts((t) => [...t.slice(-4), { id, type, message }]);
+      const next = [
+        ...toastsRef.current.slice(-4),
+        { id, type, message: clean },
+      ];
+      toastsRef.current = next;
+      setToasts(next);
       const timer = window.setTimeout(() => dismiss(id), 4500);
       timers.current.set(id, timer);
     },
     [dismiss]
   );
 
+  const success = useCallback((m: string) => push("success", m), [push]);
+  const error = useCallback((m: string) => push("error", m), [push]);
+  const info = useCallback((m: string) => push("info", m), [push]);
+
   const value = useMemo<ToastContextValue>(
     () => ({
       toasts,
       push,
-      success: (m) => push("success", m),
-      error: (m) => push("error", m),
-      info: (m) => push("info", m),
+      success,
+      error,
+      info,
       dismiss,
     }),
-    [toasts, push, dismiss]
+    [toasts, push, success, error, info, dismiss]
   );
 
   return (

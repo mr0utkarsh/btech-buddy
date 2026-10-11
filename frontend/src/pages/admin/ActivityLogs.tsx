@@ -63,7 +63,7 @@ const ACTION_FILTERS = [
 ];
 
 export function ActivityLogs() {
-  const toast = useToast();
+  const { error: toastError } = useToast();
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -88,11 +88,13 @@ export function ActivityLogs() {
       setLogs(res.data);
       setTotal(res.total);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to load");
+      setLogs([]);
+      setTotal(0);
+      toastError(e instanceof Error ? e.message : "Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [page, actionFilter, actor, toast]);
+  }, [page, actionFilter, actor, toastError]);
 
   useEffect(() => {
     load();

@@ -27,7 +27,7 @@ import {
 const MAX_BAR = 100;
 
 export function Dashboard() {
-  const toast = useToast();
+  const { error: toastError } = useToast();
   const [stats, setStats] = useState<DashboardStats | null>(
     null
   );
@@ -38,12 +38,12 @@ export function Dashboard() {
     api
       .get<DashboardStats>("/api/admin/stats")
       .then((data) => !cancelled && setStats(data))
-      .catch((e) => !cancelled && toast.error(e.message))
+      .catch((e) => !cancelled && toastError(e instanceof Error ? e.message : "Failed to load stats"))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
-  }, [toast]);
+  }, [toastError]);
 
   const maxDayDownloads = Math.max(
     1,

@@ -31,7 +31,7 @@ const STATUSES = [
 ];
 
 export function PapersAdmin() {
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const [papers, setPapers] = useState<Paper[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -55,14 +55,16 @@ export function PapersAdmin() {
       const res = await api.get<PaperListResponse>(
         `/api/admin/papers?${params.toString()}`
       );
-      setPapers(res.data);
-      setTotal(res.total);
+      setPapers(Array.isArray(res?.data) ? res.data : []);
+      setTotal(typeof res?.total === "number" ? res.total : 0);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to load");
+      setPapers([]);
+      setTotal(0);
+      toastError(e instanceof Error ? e.message : "Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [page, q, status, toast]);
+  }, [page, q, status, toastError]);
 
   useEffect(() => {
     load();
@@ -74,11 +76,11 @@ export function PapersAdmin() {
     if (!deleteTarget) return;
     try {
       await api.del(`/api/admin/papers/${deleteTarget.id}`);
-      toast.success("Paper deleted");
+      toastSuccess("Paper deleted");
       setDeleteTarget(null);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Delete failed");
+      toastError(e instanceof Error ? e.message : "Delete failed");
     }
   };
 
@@ -90,12 +92,12 @@ export function PapersAdmin() {
           isPublished ? "unpublish" : "publish"
         }`
       );
-      toast.success(
+      toastSuccess(
         isPublished ? "Paper unpublished" : "Paper published"
       );
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Action failed");
+      toastError(e instanceof Error ? e.message : "Action failed");
     }
   };
 

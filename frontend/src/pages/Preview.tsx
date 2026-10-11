@@ -16,7 +16,7 @@ import { examTypeLabel, formatBytes } from "../lib/format";
 
 export function Preview() {
   const { id } = useParams<{ id: string }>();
-  const toast = useToast();
+  const { error: toastError } = useToast();
   const [paper, setPaper] = useState<Paper | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
   const [frameError, setFrameError] = useState(false);
@@ -26,11 +26,13 @@ export function Preview() {
     api
       .get<Paper>(`/api/papers/${id}`)
       .then((data) => !cancelled && setPaper(data))
-      .catch((e) => toast.error(e.message));
+      .catch((e) => {
+        if (!cancelled) toastError(e instanceof Error ? e.message : "Failed to load paper");
+      });
     return () => {
       cancelled = true;
     };
-  }, [id, toast]);
+  }, [id, toastError]);
 
   const previewUrl = `${API_BASE}/api/papers/${id}/preview`;
 

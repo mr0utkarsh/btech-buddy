@@ -20,7 +20,7 @@ import { useToast } from "../../context/ToastContext";
 import { formatDate, timeAgo } from "../../lib/format";
 
 export function AdminsAdmin() {
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const { user, role } = useAuth();
   const isSuperAdmin = role === "super_admin";
 
@@ -43,16 +43,17 @@ export function AdminsAdmin() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api.get<{ data: Admin[] }>(
+      const res = await api.get<{ data?: Admin[] }>(
         "/api/admin/admins"
       );
-      setAdmins(res.data);
+      setAdmins(Array.isArray(res?.data) ? res.data : []);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to load");
+      setAdmins([]);
+      toastError(e instanceof Error ? e.message : "Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [toastError]);
 
   useEffect(() => {
     load();
@@ -71,7 +72,7 @@ export function AdminsAdmin() {
         message: string;
         temporary_password?: string;
       }>("/api/admin/admins/invite", inviteForm);
-      toast.success(res.message);
+      toastSuccess(res.message);
       setInviteOpen(false);
       setInviteForm({ email: "", role: "admin" });
       setTempPassword(res.temporary_password || null);
@@ -79,7 +80,7 @@ export function AdminsAdmin() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Invite failed";
       setInviteError(msg);
-      toast.error(msg);
+      toastError(msg);
     } finally {
       setInviting(false);
     }
@@ -94,26 +95,26 @@ export function AdminsAdmin() {
           `/api/admin/admins/${admin.user_id}/revoke`,
           {}
         );
-        toast.success(`Access revoked for ${admin.email}`);
+        toastSuccess(`Access revoked for ${admin.email}`);
       } else if (action === "restore") {
         await api.post(
           `/api/admin/admins/${admin.user_id}/restore`,
           {}
         );
-        toast.success(`Access restored for ${admin.email}`);
+        toastSuccess(`Access restored for ${admin.email}`);
       } else if (action === "delete") {
         await api.del(`/api/admin/admins/${admin.user_id}`);
-        toast.success(`Admin ${admin.email} removed`);
+        toastSuccess(`Admin ${admin.email} removed`);
       } else if (action === "role" && newRole) {
         await api.patch(`/api/admin/admins/${admin.user_id}`, {
           role: newRole,
         });
-        toast.success(`Role updated for ${admin.email}`);
+        toastSuccess(`Role updated for ${admin.email}`);
       }
       setConfirmState(null);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Action failed");
+      toastError(e instanceof Error ? e.message : "Action failed");
     }
   };
 

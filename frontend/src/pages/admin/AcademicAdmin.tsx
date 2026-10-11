@@ -14,7 +14,7 @@ import { Modal } from "../../components/Modal";
 import { useToast } from "../../context/ToastContext";
 
 export function AcademicAdmin() {
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const [branches, setBranches] = useState<Branch[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,17 +39,19 @@ export function AcademicAdmin() {
     setLoading(true);
     try {
       const [br, sub] = await Promise.all([
-        api.get<{ data: Branch[] }>("/api/branches"),
-        api.get<{ data: Subject[] }>("/api/subjects"),
+        api.get<{ data?: Branch[] }>("/api/branches"),
+        api.get<{ data?: Subject[] }>("/api/subjects"),
       ]);
-      setBranches(br.data);
-      setSubjects(sub.data);
+      setBranches(Array.isArray(br?.data) ? br.data : []);
+      setSubjects(Array.isArray(sub?.data) ? sub.data : []);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to load");
+      setBranches([]);
+      setSubjects([]);
+      toastError(e instanceof Error ? e.message : "Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, [toastError]);
 
   useEffect(() => {
     load();
@@ -87,18 +89,18 @@ export function AcademicAdmin() {
           name: branchForm.name.trim(),
           code: branchForm.code.trim().toUpperCase() || null,
         });
-        toast.success("Branch updated");
+        toastSuccess("Branch updated");
       } else {
         await api.post("/api/admin/branches", {
           name: branchForm.name.trim(),
           code: branchForm.code.trim().toUpperCase() || null,
         });
-        toast.success("Branch added");
+        toastSuccess("Branch added");
       }
       setBranchModal(false);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Save failed");
+      toastError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -108,11 +110,11 @@ export function AcademicAdmin() {
     if (!deletingBranch) return;
     try {
       await api.del(`/api/admin/branches/${deletingBranch.id}`);
-      toast.success("Branch deleted");
+      toastSuccess("Branch deleted");
       setDeletingBranch(null);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Delete failed");
+      toastError(e instanceof Error ? e.message : "Delete failed");
     }
   };
 
@@ -162,15 +164,15 @@ export function AcademicAdmin() {
           `/api/admin/subjects/${editingSubject.id}`,
           payload
         );
-        toast.success("Subject updated");
+        toastSuccess("Subject updated");
       } else {
         await api.post("/api/admin/subjects", payload);
-        toast.success("Subject added");
+        toastSuccess("Subject added");
       }
       setSubjectModal(false);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Save failed");
+      toastError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -180,11 +182,11 @@ export function AcademicAdmin() {
     if (!deletingSubject) return;
     try {
       await api.del(`/api/admin/subjects/${deletingSubject.id}`);
-      toast.success("Subject deleted");
+      toastSuccess("Subject deleted");
       setDeletingSubject(null);
       load();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Delete failed");
+      toastError(e instanceof Error ? e.message : "Delete failed");
     }
   };
 

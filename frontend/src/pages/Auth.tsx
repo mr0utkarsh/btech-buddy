@@ -215,7 +215,7 @@ export function Login() {
 
 export function SetupAdmin() {
   const navigate = useNavigate();
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess, info: toastInfo } = useToast();
   const [setupToken, setSetupToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -237,11 +237,11 @@ export function SetupAdmin() {
       .then((res) => {
         setStatus(res);
         if (res.super_admin_exists) {
-          toast.info("A super admin already exists.");
+          toastInfo("A super admin already exists.");
         }
       })
       .catch(() => setStatus(null));
-  }, [toast]);
+  }, [toastInfo]);
 
   const strongEnough =
     password.length >= 12 &&
@@ -269,7 +269,7 @@ export function SetupAdmin() {
         password,
         setup_token: setupToken,
       });
-      toast.success(
+      toastSuccess(
         "Super admin created! You can sign in now."
       );
       navigate("/login");
@@ -277,7 +277,7 @@ export function SetupAdmin() {
       const message =
         err instanceof Error ? err.message : "Setup failed";
       setError(message);
-      toast.error(message);
+      toastError(message);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,35 @@
-export const API_BASE =
-  (import.meta.env.VITE_API_URL as string | undefined) || "";
+const PRODUCTION_API_BASE = "https://btech-buddy-backend.onrender.com";
+
+function resolveApiBase(): string {
+  const raw = (
+    (import.meta.env.VITE_API_URL as string | undefined) || ""
+  ).trim();
+  if (raw) return raw.replace(/\/+$/, "");
+  // Local dev without env: keep relative URLs so the Vite proxy handles /api.
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") return "";
+  }
+  // Production fallback: Vercel builds without VITE_API_URL would otherwise
+  // call the frontend origin itself (which serves index.html for /api/* due
+  // to the SPA rewrite) and `resp.json()` would resolve to null.
+  return PRODUCTION_API_BASE;
+}
+
+export const API_BASE = resolveApiBase();
+
+export const isApiBaseFallback = !(
+  (import.meta.env.VITE_API_URL as string | undefined)?.trim?.() || ""
+);
+
+if (isApiBaseFallback && typeof window !== "undefined") {
+  const host = window.location.hostname;
+  if (host !== "localhost" && host !== "127.0.0.1") {
+    console.warn(
+      `BTech Buddy: VITE_API_URL is missing at build time, falling back to ${PRODUCTION_API_BASE}. Set VITE_API_URL in Vercel env to silence this.`
+    );
+  }
+}
 
 export class ApiError extends Error {
   status: number;
@@ -30,11 +60,42 @@ async function request<T>(
 
   if (resp.status === 204) return undefined as T;
 
+  const contentType = resp.headers.get("content-type") || "";
   let body: any = null;
   try {
-    body = await resp.json();
-  } catch {
+    // Some hosts (e.g. a misconfigured SPA fallback) return HTML with a
+    // 200 status for /api/* — guard so callers never receive `null`
+    // and crash on `.data`.
+    if (contentType.includes("application/json")) {
+      body = await resp.json();
+    } else {
+      const text = await resp.text();
+      try {
+        body = text ? JSON.parse(text) : null;
+      } catch {
+        body = null;
+      }
+      if (body === null) {
+        throw new ApiError(
+          resp.status,
+          resp.ok
+            ? "Unexpected response from server (expected JSON). Please try again."
+            : `Request failed (${resp.status})`
+        );
+      }
+    }
+  } catch (e) {
+    if (e instanceof ApiError) throw e;
     body = null;
+  }
+
+  if (body === null || body === undefined) {
+    throw new ApiError(
+      resp.status,
+      resp.ok
+        ? "Unexpected empty response from server. Please try again."
+        : `Request failed (${resp.status})`
+    );
   }
 
   if (!resp.ok) {

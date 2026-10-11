@@ -36,7 +36,7 @@ const EXAM_TYPES = [
 export function EditPaper() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const fileInput = useRef<HTMLInputElement>(null);
 
   const [paper, setPaper] = useState<Paper | null>(null);
@@ -65,12 +65,12 @@ export function EditPaper() {
       try {
         const [p, inst, br] = await Promise.all([
           api.get<Paper>(`/api/admin/papers/${id}`),
-          api.get<{ data: Institution[] }>("/api/institutions"),
-          api.get<{ data: Branch[] }>("/api/branches"),
+          api.get<{ data?: Institution[] }>("/api/institutions"),
+          api.get<{ data?: Branch[] }>("/api/branches"),
         ]);
         setPaper(p);
-        setInstitutions(inst.data);
-        setBranches(br.data);
+        setInstitutions(Array.isArray(inst?.data) ? inst.data : []);
+        setBranches(Array.isArray(br?.data) ? br.data : []);
         setForm({
           institution_id: p.institution_id,
           branch_id: p.branch_id,
@@ -83,18 +83,18 @@ export function EditPaper() {
           exam_year: String(p.exam_year),
         });
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Failed to load");
+        toastError(e instanceof Error ? e.message : "Failed to load");
       }
     })();
-  }, [id, toast]);
+  }, [id, toastError]);
 
   useEffect(() => {
     if (!form.branch_id) return;
     api
-      .get<{ data: Subject[] }>(
+      .get<{ data?: Subject[] }>(
         `/api/subjects?branch_id=${form.branch_id}`
       )
-      .then((res) => setSubjects(res.data))
+      .then((res) => setSubjects(Array.isArray(res?.data) ? res.data : []))
       .catch(() => setSubjects([]));
   }, [form.branch_id]);
 
@@ -119,7 +119,7 @@ export function EditPaper() {
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
-      toast.error("Please fix the highlighted fields");
+      toastError("Please fix the highlighted fields");
       return;
     }
     setSaving(true);
@@ -146,10 +146,10 @@ export function EditPaper() {
           setProgress
         );
       }
-      toast.success("Paper saved");
+      toastSuccess("Paper saved");
       navigate("/admin/papers");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Save failed");
+      toastError(err instanceof Error ? err.message : "Save failed");
     } finally {
       setSaving(false);
       setReplacing(false);

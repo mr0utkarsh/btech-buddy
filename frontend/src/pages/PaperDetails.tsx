@@ -33,7 +33,7 @@ import {
 export function PaperDetails() {
   const { id } = useParams<{ id: string }>();
   const { role } = useAuth();
-  const toast = useToast();
+  const { error: toastError, success: toastSuccess } = useToast();
   const [paper, setPaper] = useState<Paper | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -45,22 +45,22 @@ export function PaperDetails() {
       .get<Paper>(`/api/papers/${id}`)
       .then((data) => !cancelled && setPaper(data))
       .catch((e) => {
-        if (!cancelled) toast.error(e.message);
+        if (!cancelled) toastError(e instanceof Error ? e.message : "Failed to load paper");
       })
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
-  }, [id, toast]);
+  }, [id, toastError]);
 
   const share = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
-      toast.success("Link copied to clipboard");
+      toastSuccess("Link copied to clipboard");
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Could not copy the link");
+      toastError("Could not copy the link");
     }
   };
 

@@ -31,7 +31,7 @@ const SORTS = [
 
 export function Browse() {
   const [params, setParams] = useSearchParams();
-  const toast = useToast();
+  const { error: toastError } = useToast();
 
   const [filters, setFilters] = useState<FilterOptions | null>(null);
   const [result, setResult] = useState<PaperListResponse | null>(
@@ -70,12 +70,14 @@ export function Browse() {
     api
       .get<FilterOptions>("/api/papers/filters")
       .then((data) => !cancelled && setFilters(data))
-      .catch((e) => toast.error(e.message))
+      .catch((e) =>
+        !cancelled && toastError(e instanceof Error ? e.message : "Failed to load filters")
+      )
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
-  }, [toast]);
+  }, [toastError]);
 
   // Load results whenever filters change.
   useEffect(() => {
@@ -95,16 +97,27 @@ export function Browse() {
     api
       .get<PaperListResponse>(`/api/papers?${query.toString()}`)
       .then((data) => {
-        if (!cancelled) setResult(data);
+        if (cancelled) return;
+        // Defensive: never store a null/malformed envelope.
+        if (data && Array.isArray((data as PaperListResponse).data)) {
+          setResult(data);
+        } else {
+          setResult({ data: [], total: 0, page, limit: 12 });
+        }
       })
-      .catch((e) => toast.error(e.message))
+      .catch((e) => {
+        if (!cancelled) {
+          setResult({ data: [], total: 0, page, limit: 12 });
+          toastError(e instanceof Error ? e.message : "Failed to load papers");
+        }
+      })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
-  }, [q, institution, branch, semester, examType, year, sort, page, toast]);
+  }, [q, institution, branch, semester, examType, year, sort, page, toastError]);
 
   const activeFilterCount = useMemo(
     () =>
@@ -442,7 +455,7 @@ export function Browse() {
 
           {loading ? (
             <GridSkeleton count={8} />
-          ) : !result || result.data.length === 0 ? (
+          ) : !result || (result.data || []).length === 0 ? (
             <div className="rounded-2xl border border-dashed border-navy-200 bg-white p-14 text-center">
               <FileSearch className="mx-auto h-12 w-12 text-navy-300" />
               <h3 className="mt-4 font-display text-lg font-semibold text-navy-900">
@@ -461,7 +474,7 @@ export function Browse() {
           ) : (
             <>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {result.data.map((paper, i) => (
+                {(result.data || []).map((paper, i) => (
                   <PaperCard key={paper.id} paper={paper} index={i} />
                 ))}
               </div>
