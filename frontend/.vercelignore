@@ -1,0 +1,8 @@
+# Keep CLI uploads small: dependencies and build output are recreated by the
+# remote build. Without this file the CLI only honours .gitignore, and
+# frontend/.gitignore lists just ".vercel".
+node_modules/
+dist/
+.vercel/
+*.tsbuildinfo
+.vite/

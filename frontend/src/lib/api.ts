@@ -1,32 +1,44 @@
 const PRODUCTION_API_BASE = "https://btech-buddy-backend.onrender.com";
 
+/**
+ * Normalise a configured API base. Returns `null` when the value is empty or
+ * is not an absolute http(s) URL (e.g. a key accidentally pasted into
+ * VITE_API_URL) so callers can fall back instead of building a broken
+ * request URL like `https://<jwt>/api/...`.
+ */
+function normalizeApiBase(value: string | undefined): string | null {
+  const trimmed = (value || "").trim().replace(/\/+$/, "");
+  if (!trimmed) return null;
+  if (!/^https?:\/\//i.test(trimmed)) return null;
+  return trimmed;
+}
+
 function resolveApiBase(): string {
-  const raw = (
-    (import.meta.env.VITE_API_URL as string | undefined) || ""
-  ).trim();
-  if (raw) return raw.replace(/\/+$/, "");
+  const fromEnv = normalizeApiBase(
+    import.meta.env.VITE_API_URL as string | undefined
+  );
+  if (fromEnv) return fromEnv;
   // Local dev without env: keep relative URLs so the Vite proxy handles /api.
   if (typeof window !== "undefined") {
     const host = window.location.hostname;
     if (host === "localhost" || host === "127.0.0.1") return "";
   }
-  // Production fallback: Vercel builds without VITE_API_URL would otherwise
-  // call the frontend origin itself (which serves index.html for /api/* due
-  // to the SPA rewrite) and `resp.json()` would resolve to null.
+  // Production fallback: Vercel builds without a usable VITE_API_URL would
+  // otherwise call the frontend origin itself (which serves index.html for
+  // /api/* due to the SPA rewrite) and `resp.json()` would resolve to null.
   return PRODUCTION_API_BASE;
 }
 
 export const API_BASE = resolveApiBase();
 
-export const isApiBaseFallback = !(
-  (import.meta.env.VITE_API_URL as string | undefined)?.trim?.() || ""
-);
+export const isApiBaseFallback =
+  normalizeApiBase(import.meta.env.VITE_API_URL as string | undefined) === null;
 
 if (isApiBaseFallback && typeof window !== "undefined") {
   const host = window.location.hostname;
   if (host !== "localhost" && host !== "127.0.0.1") {
     console.warn(
-      `BTech Buddy: VITE_API_URL is missing at build time, falling back to ${PRODUCTION_API_BASE}. Set VITE_API_URL in Vercel env to silence this.`
+      `BTech Buddy: VITE_API_URL is missing or not an absolute http(s) URL at build time, falling back to ${PRODUCTION_API_BASE}. Set VITE_API_URL in Vercel env to silence this.`
     );
   }
 }
