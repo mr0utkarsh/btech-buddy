@@ -54,11 +54,13 @@ insert into public.branches (name, code) values
 on conflict (name) do nothing;
 
 -- ================================================================ SUBJECTS
--- Helper view: insert subjects by branch code + semester.
+-- Pattern: FROM branch CROSS JOIN (values ...) WHERE code — joins must
+-- precede the WHERE clause in PostgreSQL.
 
 -- ------------------------------ CSE (all 8 semesters)
 insert into public.subjects (branch_id, semester, name)
-select id, 1, x from public.branches where code = 'CSE'
+select b.id, 1, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-I'),
   ('Engineering Physics'),
@@ -66,10 +68,12 @@ cross join (values
   ('Basic Electrical Engineering'),
   ('Engineering Mechanics'),
   ('Programming for Problem Solving')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 2, x from public.branches where code = 'CSE'
+select b.id, 2, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-II'),
   ('Engineering Graphics'),
@@ -77,10 +81,12 @@ cross join (values
   ('Computer Organization and Architecture'),
   ('Object Oriented Programming'),
   ('Discrete Mathematics')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 3, x from public.branches where code = 'CSE'
+select b.id, 3, x
+from public.branches b
 cross join (values
   ('Data Structures and Algorithms'),
   ('Operating Systems'),
@@ -88,20 +94,24 @@ cross join (values
   ('Computer Networks'),
   ('Theory of Computation'),
   ('Digital Electronics')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 4, x from public.branches where code = 'CSE'
+select b.id, 4, x
+from public.branches b
 cross join (values
   ('Design and Analysis of Algorithms'),
   ('Software Engineering'),
   ('Compiler Design'),
   ('Microprocessors and Microcontrollers'),
   ('Artificial Intelligence')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 5, x from public.branches where code = 'CSE'
+select b.id, 5, x
+from public.branches b
 cross join (values
   ('Computer Architecture'),
   ('Advanced Database Systems'),
@@ -109,36 +119,42 @@ cross join (values
   ('Machine Learning'),
   ('Web Technologies'),
   ('Software Testing')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 6, x from public.branches where code = 'CSE'
+select b.id, 6, x
+from public.branches b
 cross join (values
   ('Cloud Computing'),
   ('Data Mining'),
   ('Internet of Things'),
-  ('Cyber Security'),
   ('Mobile Computing'),
   ('Distributed Systems')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 7, x from public.branches where code = 'CSE'
+select b.id, 7, x
+from public.branches b
 cross join (values
   ('Deep Learning'),
   ('Natural Language Processing'),
   ('Big Data Analytics'),
   ('Information Security'),
   ('Embedded Systems')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 8, x from public.branches where code = 'CSE'
+select b.id, 8, x
+from public.branches b
 cross join (values
   ('Robotics'),
   ('Computer Vision'),
   ('Software Project Management'),
   ('Blockchain Technology')) as t(x)
+where b.code = 'CSE'
 on conflict (branch_id, semester, name) do nothing;
 
 -- ------------------------------ IT (all 8 semesters, CSE-like catalog)
@@ -163,7 +179,8 @@ on conflict (branch_id, semester, name) do nothing;
 
 -- ------------------------------ ECE (sem 1-4)
 insert into public.subjects (branch_id, semester, name)
-select id, 1, x from public.branches where code = 'ECE'
+select b.id, 1, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-I'),
   ('Engineering Physics'),
@@ -171,10 +188,12 @@ cross join (values
   ('Basic Electrical Engineering'),
   ('Engineering Mechanics'),
   ('Programming for Problem Solving')) as t(x)
+where b.code = 'ECE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 2, x from public.branches where code = 'ECE'
+select b.id, 2, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-II'),
   ('Engineering Graphics'),
@@ -182,10 +201,12 @@ cross join (values
   ('Analog Electronics'),
   ('Digital Electronics'),
   ('Signals and Systems')) as t(x)
+where b.code = 'ECE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 3, x from public.branches where code = 'ECE'
+select b.id, 3, x
+from public.branches b
 cross join (values
   ('Electromagnetic Theory'),
   ('Electronic Devices and Circuits'),
@@ -193,31 +214,37 @@ cross join (values
   ('Digital Signal Processing'),
   ('Control Systems'),
   ('Computer Networks')) as t(x)
+where b.code = 'ECE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 4, x from public.branches where code = 'ECE'
+select b.id, 4, x
+from public.branches b
 cross join (values
   ('VLSI Design'),
   ('Microprocessors and Microcontrollers'),
   ('Antenna Theory'),
   ('Digital Communication'),
   ('Embedded Systems')) as t(x)
+where b.code = 'ECE'
 on conflict (branch_id, semester, name) do nothing;
 
 -- ------------------------------ EE (sem 1-4)
 insert into public.subjects (branch_id, semester, name)
-select id, 1, x from public.branches where code = 'EE'
+select b.id, 1, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-I'),
   ('Engineering Physics'),
   ('Engineering Chemistry'),
   ('Basic Electrical Engineering'),
   ('Engineering Mechanics')) as t(x)
+where b.code = 'EE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 2, x from public.branches where code = 'EE'
+select b.id, 2, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-II'),
   ('Engineering Graphics'),
@@ -225,41 +252,48 @@ cross join (values
   ('Electrical Machines-I'),
   ('Engineering Thermodynamics'),
   ('Electromagnetic Theory')) as t(x)
+where b.code = 'EE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 3, x from public.branches where code = 'EE'
+select b.id, 3, x
+from public.branches b
 cross join (values
   ('Electrical Machines-II'),
   ('Power Systems'),
   ('Control Systems'),
   ('Electrical Measurements'),
   ('Digital Electronics')) as t(x)
+where b.code = 'EE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 4, x from public.branches where code = 'EE'
+select b.id, 4, x
+from public.branches b
 cross join (values
   ('Power Electronics'),
   ('Electrical Drives'),
   ('Microprocessors and Microcontrollers'),
   ('Instrumentation'),
   ('Renewable Energy Sources')) as t(x)
+where b.code = 'EE'
 on conflict (branch_id, semester, name) do nothing;
 
 -- ------------------------------ ME (sem 1-4)
 insert into public.subjects (branch_id, semester, name)
-select id, 1, x from public.branches where code = 'ME'
+select b.id, 1, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-I'),
   ('Engineering Physics'),
   ('Engineering Chemistry'),
-  ('Basic Electrical Engineering'),
   ('Engineering Mechanics')) as t(x)
+where b.code = 'ME'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 2, x from public.branches where code = 'ME'
+select b.id, 2, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-II'),
   ('Engineering Graphics'),
@@ -267,67 +301,79 @@ cross join (values
   ('Mechanics of Materials'),
   ('Theory of Machines'),
   ('Fluid Mechanics')) as t(x)
+where b.code = 'ME'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 3, x from public.branches where code = 'ME'
+select b.id, 3, x
+from public.branches b
 cross join (values
   ('Machine Design'),
   ('Heat Transfer'),
   ('Internal Combustion Engines'),
   ('Manufacturing Technology'),
   ('Control Systems')) as t(x)
+where b.code = 'ME'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 4, x from public.branches where code = 'ME'
+select b.id, 4, x
+from public.branches b
 cross join (values
   ('Refrigeration and Air Conditioning'),
   ('Industrial Engineering'),
   ('CAD/CAM'),
   ('Mechatronics'),
   ('Automobile Engineering')) as t(x)
+where b.code = 'ME'
 on conflict (branch_id, semester, name) do nothing;
 
 -- ------------------------------ CE (sem 1-4)
 insert into public.subjects (branch_id, semester, name)
-select id, 1, x from public.branches where code = 'CE'
+select b.id, 1, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-I'),
   ('Engineering Physics'),
   ('Engineering Chemistry'),
-  ('Basic Electrical Engineering'),
   ('Engineering Mechanics')) as t(x)
+where b.code = 'CE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 2, x from public.branches where code = 'CE'
+select b.id, 2, x
+from public.branches b
 cross join (values
   ('Engineering Mathematics-II'),
   ('Engineering Graphics'),
   ('Surveying'),
   ('Mechanics of Materials'),
   ('Fluid Mechanics')) as t(x)
+where b.code = 'CE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 3, x from public.branches where code = 'CE'
+select b.id, 3, x
+from public.branches b
 cross join (values
   ('Structural Analysis'),
   ('Concrete Technology'),
   ('Geotechnical Engineering'),
   ('Transportation Engineering'),
   ('Hydraulics')) as t(x)
+where b.code = 'CE'
 on conflict (branch_id, semester, name) do nothing;
 
 insert into public.subjects (branch_id, semester, name)
-select id, 4, x from public.branches where code = 'CE'
+select b.id, 4, x
+from public.branches b
 cross join (values
   ('Design of Concrete Structures'),
   ('Design of Steel Structures'),
   ('Water Resources Engineering'),
   ('Environmental Engineering'),
   ('Highway Engineering')) as t(x)
+where b.code = 'CE'
 on conflict (branch_id, semester, name) do nothing;
 
 commit;
