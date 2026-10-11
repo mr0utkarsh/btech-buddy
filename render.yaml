@@ -1,26 +1,26 @@
 # BTech Buddy — Render Blueprint
 # Docs: https://render.com/docs/blueprint-spec
 #
-# Create the service from this file (Dashboard > Blueprint, or `render blueprint`),
-# then set these environment variables in the Render dashboard (Settings > Env):
-#   SUPABASE_URL               https://<project-ref>.supabase.co
+# Create the service from this file (Dashboard > New > Blueprint,
+# connect github.com/mr0utkarsh/btech-buddy). Then set these
+# environment variables in the Render dashboard (Service > Env):
+#   SUPABASE_URL               https://putprsxpweglbiluscch.supabase.co
 #   SUPABASE_SERVICE_ROLE_KEY  (Project Settings > API — secret, never in this file)
 #   SUPABASE_JWT_SECRET        (only for older HS256 projects)
-#   INITIAL_SUPER_ADMIN_EMAIL  e.g. admin@example.com
-#   INITIAL_SUPER_ADMIN_PASSWORD  strong password (or use the one-time /setup flow)
-#   CORS_ORIGINS               https://your-frontend-url.vercel.app
-#   API_BASE_URL               https://btech-buddy-backend.onrender.com
+#   INITIAL_SUPER_ADMIN_EMAIL  vishalkumar8299@gmail.com
+#   INITIAL_SUPER_ADMIN_PASSWORD (set in dashboard — never in this file)
+#   API_BASE_URL               https://<this-service>.onrender.com
 #
-# The Dockerfile in backend/ is used as-is (EXPOSE 8000).
+# The root Dockerfile is used (build context = repo root).
 services:
   - type: web
     name: btech-buddy-backend
     env: docker
-    dockerfilePath: backend/Dockerfile
+    dockerfilePath: Dockerfile
     plan: starter
     envVars:
       - key: CORS_ORIGINS
-        value: http://localhost:5173
+        value: https://btech-buddy-six.vercel.app
       - key: API_RATE_LIMIT
         value: 60/minute
       - key: DOWNLOAD_RATE_LIMIT

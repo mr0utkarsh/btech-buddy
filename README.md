@@ -140,6 +140,9 @@ docker compose up --build              # backend on :8000
 ```
 Deploy the frontend to Vercel/Netlify (see `frontend/vercel.json` for SPA rewrites) with the `VITE_*` env vars set.
 
+### 8. Render (recommended host)
+Dashboard → **New +** → **Blueprint** → connect `github.com/mr0utkarsh/btech-buddy` — the root `render.yaml` configures a Docker web service (`plan: starter`, free tier). Then add the secret env vars (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, INITIAL_SUPER_ADMIN_EMAIL, INITIAL_SUPER_ADMIN_PASSWORD) in Render → Service → Environment. The backend creates the first super admin on startup.
+
 ## Testing
 
 Backend (pytest):
