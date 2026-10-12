@@ -51,6 +51,22 @@ export class ApiError extends Error {
   }
 }
 
+/** Map HTTP statuses to user-facing messages. Never leak internals. */
+function messageForStatus(status: number, detail?: string): string {
+  if (status === 401 || status === 403) return "Session expired — sign in again.";
+  if (status === 404) return "The requested resource was not found.";
+  if (status === 413) return "File is too large. Maximum size is 50 MB.";
+  if (status === 400 || status === 422)
+    return detail || "Validation failed. Please check your inputs.";
+  if (status === 502 || status === 503 || status === 504)
+    return "Backend temporarily unavailable. Please try again in a moment.";
+  if (status >= 500) return "Server error. Please try again later.";
+  return detail || `Request failed (${status})`;
+}
+
+const TRANSPORT_MESSAGE =
+  "Cannot reach the server. It may be temporarily unavailable — please check your connection and try again.";
+
 async function request<T>(
   path: string,
   options: RequestInit = {}
@@ -67,7 +83,7 @@ async function request<T>(
   try {
     resp = await fetch(`${API_BASE}${path}`, { ...options, headers });
   } catch {
-    throw new ApiError(0, "Network error. Please check your connection.");
+    throw new ApiError(0, TRANSPORT_MESSAGE);
   }
 
   if (resp.status === 204) return undefined as T;
@@ -111,8 +127,7 @@ async function request<T>(
   }
 
   if (!resp.ok) {
-    const message =
-      body?.detail || body?.message || `Request failed (${resp.status})`;
+    const message = messageForStatus(resp.status, body?.detail || body?.message);
     throw new ApiError(resp.status, message);
   }
   return body as T;
@@ -146,6 +161,7 @@ export function uploadWithProgress(
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `${API_BASE}${path}`);
     if (token) xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+    xhr.timeout = 120000; // large PDFs can take a while
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
         onProgress(Math.round((e.loaded / e.total) * 100));
@@ -159,18 +175,25 @@ export function uploadWithProgress(
         body = null;
       }
       if (xhr.status >= 200 && xhr.status < 300) {
+        if (body === null || body === undefined) {
+          reject(
+            new ApiError(xhr.status, "Unexpected empty response from server. Please try again.")
+          );
+          return;
+        }
         resolve(body);
       } else {
         reject(
           new ApiError(
             xhr.status,
-            body?.detail || body?.message || "Upload failed"
+            messageForStatus(xhr.status, body?.detail || body?.message)
           )
         );
       }
     };
-    xhr.onerror = () =>
-      reject(new ApiError(0, "Network error. Please check your connection."));
+    xhr.onerror = () => reject(new ApiError(0, TRANSPORT_MESSAGE));
+    xhr.ontimeout = () =>
+      reject(new ApiError(0, "Request timed out. Please try again."));
     xhr.send(formData);
   });
 }

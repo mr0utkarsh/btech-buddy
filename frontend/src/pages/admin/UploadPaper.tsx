@@ -136,6 +136,12 @@ export function UploadPaper() {
     setUploading(true);
     setProgress(0);
     try {
+      const token = getAdminToken();
+      if (!token) {
+        toastError("Session expired — sign in again");
+        navigate("/login");
+        return;
+      }
       const formData = new FormData();
       formData.append("institution_id", form.institution_id);
       formData.append("branch_id", form.branch_id);
@@ -155,7 +161,7 @@ export function UploadPaper() {
       await uploadWithProgress(
         "/api/admin/papers",
         formData,
-        getAdminToken(),
+        token,
         setProgress
       );
       toastSuccess(

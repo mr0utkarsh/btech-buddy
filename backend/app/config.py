@@ -19,6 +19,15 @@ class Settings(BaseSettings):
     initial_super_admin_password: str = ""
 
     cors_origins: str = "http://localhost:5173"
+    # Regex matched against the Origin header in addition to the exact
+    # list above. Covers Vercel preview deployments (any *.vercel.app
+    # subdomain) and local dev servers, so admin uploads keep working
+    # from preview URLs without enumerating them.
+    cors_origin_regex: str = (
+        r"^https://.*\.vercel\.app$"
+        r"|^https?://localhost(:\d+)?$"
+        r"|^https?://127\.0\.0\.1(:\d+)?$"
+    )
     api_rate_limit: str = "60/minute"
     download_rate_limit: str = "20/minute"
     preview_rate_limit: str = "60/minute"

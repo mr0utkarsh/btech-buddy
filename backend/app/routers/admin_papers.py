@@ -211,7 +211,17 @@ async def upload_paper(
     if resolved_specialization_id:
         row["specialization_id"] = resolved_specialization_id
 
-    paper = await insert_row("papers", row)
+    try:
+        paper = await insert_row("papers", row)
+    except Exception:
+        # Compensation: remove uploaded files so a failed database
+        # insert does not leave orphaned objects in storage.
+        for orphan_path in (original_path, processed_path):
+            try:
+                await storage_delete(settings.storage_bucket, orphan_path)
+            except Exception:
+                pass
+        raise
     await log_activity(
         actor_id=user.get("sub"),
         actor_email=user.get("email"),

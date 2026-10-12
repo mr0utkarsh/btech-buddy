@@ -41,6 +41,41 @@ def test_health_endpoint(client):
     assert body["service"] == "btech-buddy-backend"
 
 
+def test_cors_allows_vercel_preview_and_local_origins(client):
+    """Preflight from any *.vercel.app preview deployment and local dev
+    servers must pass — admin uploads otherwise fail as browser-level
+    "network errors" from those origins."""
+    origins = [
+        "https://btech-buddy-six.vercel.app",
+        "https://btech-buddy-git-feature-mr0utkarsh.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+    for origin in origins:
+        resp = client.options(
+            "/api/admin/papers",
+            headers={
+                "Origin": origin,
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "authorization,content-type",
+            },
+        )
+        assert resp.status_code == 200, origin
+        assert resp.headers["access-control-allow-origin"] == origin
+        assert "authorization" in resp.headers["access-control-allow-headers"]
+
+
+def test_cors_rejects_unrelated_origin(client):
+    resp = client.options(
+        "/api/admin/papers",
+        headers={
+            "Origin": "https://evil.example.com",
+            "Access-Control-Request-Method": "POST",
+        },
+    )
+    assert resp.headers.get("access-control-allow-origin") != "https://evil.example.com"
+
+
 def test_catalog_constants_are_smvdu_cse_ai_robotics():
     """The customer catalog is fixed to exactly one program."""
     from app.catalog import ALLOWED_SPECIALIZATIONS
