@@ -121,6 +121,8 @@ async def rpc(function_name: str, args: Dict[str, Any]) -> Any:
         f"/rest/v1/rpc/{function_name}", headers=dict(_default_headers), json=args
     )
     _check_response(resp)
+    if not resp.content:
+        return None
     return resp.json()
 
 
@@ -161,7 +163,7 @@ async def storage_signed_url(bucket: str, path: str, expires_in: int = 60) -> st
             url = data.get("signedURL") or data.get("signed_url")
             if url:
                 return url if url.startswith("http") else f"{settings.supabase_url}{url}"
-        except httpx.HTTPError:
+        except (httpx.HTTPError, ValueError):
             continue
     # Fallback: direct object GET with the service role key (short-lived by
     # virtue of being generated per request and never exposed to browsers).
