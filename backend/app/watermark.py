@@ -1,7 +1,9 @@
 """PDF watermarking with PyMuPDF.
 
-Adds a light, diagonal, repeating "BTech Buddy" watermark to every
-page of a PDF. Works entirely in memory.
+Adds a light, diagonal, repeating "Evee bhaiya" watermark to every
+page of a question-paper PDF. Works entirely in memory. The text comes from
+``settings.watermark_text`` at the call sites (upload/replace), so this module
+only handles rendering; the default below matches the configured value.
 """
 from __future__ import annotations
 
@@ -16,7 +18,7 @@ _WATERMARK_COLOR = (0.10, 0.16, 0.28)
 
 def add_watermark(
     pdf_bytes: bytes,
-    text: str = "BTech Buddy",
+    text: str = "Evee bhaiya",
     *,
     opacity: float = 0.12,
     angle: float = 45.0,

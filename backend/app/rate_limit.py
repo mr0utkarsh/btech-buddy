@@ -28,4 +28,17 @@ class BadRequestError(Exception):
         self.message = message
 
 
+class PasswordChangeRequiredError(Exception):
+    """Returned as HTTP 403 with code PASSWORD_CHANGE_REQUIRED.
+
+    Raised when an admin still has ``must_change_password`` set (they signed in
+    with a temporary password) and attempts any admin operation other than
+    reading ``/me`` or completing the password change.
+    """
+
+    def __init__(self, message: str = "You must change your password before continuing."):
+        super().__init__(message)
+        self.message = message
+
+
 limiter = Limiter(key_func=get_remote_address)

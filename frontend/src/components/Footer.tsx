@@ -87,6 +87,17 @@ export function Footer() {
                   Admin Login
                 </Link>
               </li>
+              <li>
+                <span className="block text-xs text-footer-muted">
+                  Help &amp; Support
+                </span>
+                <a
+                  href="mailto:vishalkumar829987@gmail.com"
+                  className="break-all text-sm text-footer-muted transition hover:text-footer-fg"
+                >
+                  vishalkumar829987@gmail.com
+                </a>
+              </li>
             </ul>
           </div>
         </div>

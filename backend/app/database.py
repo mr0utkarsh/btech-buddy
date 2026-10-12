@@ -200,6 +200,21 @@ async def auth_admin_delete_user(user_id: str) -> None:
     _check_response(resp)
 
 
+async def auth_admin_update_user_password(user_id: str, password: str) -> Dict[str, Any]:
+    """Set a user's password via the Supabase Auth Admin API.
+
+    Server-side only (service role key). The plaintext password is forwarded to
+    Supabase over HTTPS and is never stored in any application table or log.
+    """
+    resp = await _auth_client.put(
+        f"{settings.supabase_url.rstrip('/')}/auth/v1/admin/users/{user_id}",
+        headers={**_default_headers, "Content-Type": "application/json"},
+        json={"password": password},
+    )
+    _check_response(resp)
+    return resp.json()
+
+
 async def auth_admin_list_users(page: int = 1, per_page: int = 200) -> List[Dict[str, Any]]:
     resp = await _auth_client.get(
         f"{settings.supabase_url.rstrip('/')}/auth/v1/admin/users",

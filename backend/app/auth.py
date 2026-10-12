@@ -16,6 +16,7 @@ import jwt
 
 from app.config import settings
 from app.database import select_one
+from app.rate_limit import PasswordChangeRequiredError
 
 _jwks_cache: Dict[str, Any] = {"fetched_at": 0.0, "keys": []}
 
@@ -96,18 +97,32 @@ async def get_admin_record(user_id: str) -> Optional[Dict[str, Any]]:
     return await select_one("admins", params={"user_id": f"eq.{user_id}"})
 
 
-async def require_admin(authorization: Optional[str]) -> Dict[str, Any]:
-    """FastAPI dependency: authenticated admin (any role, not revoked)."""
+async def require_admin(
+    authorization: Optional[str], *, enforce_password_change: bool = True
+) -> Dict[str, Any]:
+    """FastAPI dependency: authenticated admin (any role, not revoked).
+
+    When ``enforce_password_change`` is true (the default) an admin who still
+    has ``must_change_password`` set — i.e. signed in with a temporary password —
+    is blocked from every admin operation except the ones required to complete
+    the change (``/me`` and the change-password endpoint, which opt out).
+    """
     user = await get_current_user(authorization)
     admin = await get_admin_record(user.get("sub", ""))
     if not admin or admin.get("revoked_at"):
         raise PermissionError("Admin access required")
+    if enforce_password_change and admin.get("must_change_password"):
+        raise PasswordChangeRequiredError()
     return {"user": user, "admin": admin}
 
 
-async def require_super_admin(authorization: Optional[str]) -> Dict[str, Any]:
+async def require_super_admin(
+    authorization: Optional[str], *, enforce_password_change: bool = True
+) -> Dict[str, Any]:
     """FastAPI dependency: authenticated super admin."""
-    ctx = await require_admin(authorization)
+    ctx = await require_admin(
+        authorization, enforce_password_change=enforce_password_change
+    )
     if ctx["admin"].get("role") != "super_admin":
         raise PermissionError("Super admin access required")
     return ctx

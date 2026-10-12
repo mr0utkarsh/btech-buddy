@@ -526,7 +526,7 @@ export function UploadPaper() {
             </div>
             <p className="mt-1.5 text-xs text-fg-subtle">
               After upload, every page is stamped with the
-              BTech Buddy watermark automatically.
+              &ldquo;Evee bhaiya&rdquo; watermark automatically.
             </p>
           </div>
         )}

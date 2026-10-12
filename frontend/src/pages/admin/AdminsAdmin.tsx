@@ -413,8 +413,9 @@ export function AdminsAdmin() {
           </button>
         </div>
         <p className="mt-3 text-xs text-fg-subtle">
-          The new admin must change their password after
-          first sign-in via Supabase.
+          Share this securely with the new admin. On first
+          sign-in they will be required to set a new
+          password before using the dashboard.
         </p>
         <button
           onClick={() => setTempPassword(null)}

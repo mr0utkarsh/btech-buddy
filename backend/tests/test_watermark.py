@@ -32,10 +32,10 @@ def test_watermark_preserves_pages_and_text():
 
 def test_watermark_text_present_on_every_page():
     pdf = make_pdf(pages=4)
-    out = add_watermark(pdf, text="BTech Buddy")
+    out = add_watermark(pdf, text="Evee bhaiya")
     doc = fitz.open(stream=out, filetype="pdf")
     for page in doc:
-        assert "BTech Buddy" in page.get_text()
+        assert "Evee bhaiya" in page.get_text()
     doc.close()
 
 
@@ -44,7 +44,7 @@ def test_watermark_single_page_pdf():
     out = add_watermark(pdf)
     doc = fitz.open(stream=out, filetype="pdf")
     assert doc.page_count == 1
-    assert "BTech Buddy" in doc[0].get_text()
+    assert "Evee bhaiya" in doc[0].get_text()
     doc.close()
 
 

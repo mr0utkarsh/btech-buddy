@@ -20,18 +20,38 @@ from app.auth import require_admin, require_super_admin
 from app.database import (
     auth_admin_create_user,
     auth_admin_delete_user,
+    auth_admin_update_user_password,
     insert_row,
     select_rows,
     select_one,
     update_row,
 )
-from app.rate_limit import BadRequestError, ForbiddenError, NotFoundError, limiter
+from app.rate_limit import (
+    BadRequestError,
+    ForbiddenError,
+    NotFoundError,
+    limiter,
+)
 
 router = APIRouter(prefix="/api/admin/admins", tags=["admins"])
+
+PASSWORD_RULES = (
+    "Password must be at least 12 characters and include uppercase, "
+    "lowercase, a number, and a symbol"
+)
 
 
 async def admin_ctx(authorization: Optional[str] = Header(default=None)):
     return await require_admin(authorization)
+
+
+async def admin_ctx_relaxed(authorization: Optional[str] = Header(default=None)):
+    """Admin context that still works while ``must_change_password`` is set.
+
+    Used only by ``/me`` and the change-password endpoint so a newly invited
+    admin can complete the mandatory first password change.
+    """
+    return await require_admin(authorization, enforce_password_change=False)
 
 
 async def super_ctx(authorization: Optional[str] = Header(default=None)):
@@ -39,15 +59,68 @@ async def super_ctx(authorization: Optional[str] = Header(default=None)):
 
 
 @router.get("/me")
-async def get_my_admin(ctx: Dict[str, Any] = Depends(admin_ctx)):
-    """Current admin's identity and role (used by the frontend guard)."""
+async def get_my_admin(ctx: Dict[str, Any] = Depends(admin_ctx_relaxed)):
+    """Current admin's identity, role and password-change state."""
     admin = ctx["admin"]
     return {
       "role": admin["role"],
       "email": admin["email"],
       "user_id": admin["user_id"],
       "active": not admin.get("revoked_at"),
+      "must_change_password": bool(admin.get("must_change_password")),
     }
+
+
+@router.post("/change-password")
+@limiter.limit("10/minute")
+async def change_my_password(
+    request: Request,
+    payload: Dict[str, Any],
+    ctx: Dict[str, Any] = Depends(admin_ctx_relaxed),
+):
+    """Set a new password for the signed-in admin.
+
+    Used both for the mandatory first-login change (temporary password) and for
+    later changes from the profile/settings area. The password is forwarded to
+    Supabase Auth (which owns hashing); it is never stored in app tables or logs.
+    """
+    user = ctx["user"]
+    admin = ctx["admin"]
+    new_password = str(payload.get("new_password", ""))
+    confirm_password = str(payload.get("confirm_password", ""))
+
+    if new_password != confirm_password:
+        raise BadRequestError("New password and confirmation do not match")
+    if len(new_password) < 12 or len(new_password) > 128:
+        raise BadRequestError("Password must be 12-128 characters long")
+    import re
+
+    if not (
+        re.search(r"[A-Z]", new_password)
+        and re.search(r"[a-z]", new_password)
+        and re.search(r"[0-9]", new_password)
+        and re.search(r"[^A-Za-z0-9]", new_password)
+    ):
+        raise BadRequestError(PASSWORD_RULES)
+
+    try:
+        await auth_admin_update_user_password(user.get("sub"), new_password)
+    except Exception as exc:  # noqa: BLE001
+        raise BadRequestError(f"Could not update the password: {exc}")
+
+    await update_row(
+        "admins",
+        params={"user_id": f"eq.{user.get('sub')}"},
+        patch={"must_change_password": False},
+    )
+    await log_activity(
+        actor_id=user.get("sub"),
+        actor_email=user.get("email") or admin.get("email"),
+        action="admin.password.change",
+        entity_type="admin",
+        entity_id=user.get("sub"),
+    )
+    return {"message": "Password updated successfully"}
 
 
 @router.get("")
@@ -110,6 +183,9 @@ async def invite_admin(
         )
         admin_row = {**existing, "revoked_at": None, "role": role}
     else:
+        # Newly created admins must change their temporary password at first
+        # sign-in before they can use the dashboard.
+        row["must_change_password"] = True
         admin_row = await insert_row("admins", row)
 
     await log_activity(

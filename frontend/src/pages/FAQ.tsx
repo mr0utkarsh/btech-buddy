@@ -16,7 +16,7 @@ const FAQS = [
       },
       {
         q: "Why do downloaded PDFs have a watermark?",
-        a: "A light diagonal 'BTech Buddy' watermark is applied automatically to every page. It keeps the library free and attribution intact while letting papers circulate freely.",
+        a: "A light diagonal 'Evee bhaiya' watermark is applied automatically to every page of each question-paper PDF. It keeps the library free and attribution intact while letting papers circulate freely. The website itself remains BTech Buddy.",
       },
       {
         q: "How often is new content added?",

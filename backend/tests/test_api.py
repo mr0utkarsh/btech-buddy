@@ -119,3 +119,102 @@ def test_upload_rejects_non_pdf_without_auth(client):
     # Must reject before any DB access: 401/403/400 all acceptable
     # as "not uploaded".
     assert resp.status_code in (400, 401, 403)
+
+
+# --------------------------------------------------------------- password flow
+def test_change_password_requires_auth(client):
+    """Unauthenticated callers cannot reach the change-password endpoint."""
+    resp = client.post(
+        "/api/admin/admins/change-password",
+        json={"new_password": "Strong@Password123", "confirm_password": "Strong@Password123"},
+    )
+    assert resp.status_code in (401, 403)
+
+
+def test_require_admin_blocks_when_password_change_required(monkeypatch):
+    """An admin with must_change_password is blocked from normal ops, but the
+    relaxed variant (used by /me and change-password) still works."""
+    import asyncio
+
+    import app.auth as auth
+    from app.rate_limit import PasswordChangeRequiredError
+
+    async def fake_user(_token):
+        return {"sub": "u1", "email": "a@b.c"}
+
+    async def fake_admin(_uid):
+        return {
+            "user_id": "u1",
+            "role": "admin",
+            "revoked_at": None,
+            "must_change_password": True,
+        }
+
+    monkeypatch.setattr(auth, "get_current_user", fake_user)
+    monkeypatch.setattr(auth, "get_admin_record", fake_admin)
+
+    with pytest.raises(PasswordChangeRequiredError):
+        asyncio.run(auth.require_admin("Bearer x"))
+
+    ctx = asyncio.run(auth.require_admin("Bearer x", enforce_password_change=False))
+    assert ctx["admin"]["role"] == "admin"
+
+
+def test_password_change_required_handler_shape():
+    """The dedicated handler returns 403 with a machine-readable code."""
+    import asyncio
+    import json
+
+    from app.main import password_change_required_handler
+    from app.rate_limit import PasswordChangeRequiredError
+
+    resp = asyncio.run(
+        password_change_required_handler(None, PasswordChangeRequiredError())
+    )
+    assert resp.status_code == 403
+    body = json.loads(resp.body)
+    assert body["code"] == "PASSWORD_CHANGE_REQUIRED"
+
+
+def _override_relaxed_ctx(app_obj, admins_mod, client):
+    async def fake_ctx():
+        return {
+            "user": {"sub": "u1", "email": "a@b.c"},
+            "admin": {"user_id": "u1", "role": "admin", "must_change_password": True},
+        }
+
+    app_obj.dependency_overrides[admins_mod.admin_ctx_relaxed] = fake_ctx
+    return fake_ctx
+
+
+def test_change_password_rejects_mismatch(client):
+    from app.main import app as fastapi_app
+    from app.routers import admins as admins_mod
+
+    _override_relaxed_ctx(fastapi_app, admins_mod, client)
+    try:
+        resp = client.post(
+            "/api/admin/admins/change-password",
+            json={
+                "new_password": "Strong@Password123",
+                "confirm_password": "Different@Password123",
+            },
+        )
+        assert resp.status_code == 400
+    finally:
+        fastapi_app.dependency_overrides.pop(admins_mod.admin_ctx_relaxed, None)
+
+
+def test_change_password_rejects_weak_password(client):
+    from app.main import app as fastapi_app
+    from app.routers import admins as admins_mod
+
+    _override_relaxed_ctx(fastapi_app, admins_mod, client)
+    try:
+        resp = client.post(
+            "/api/admin/admins/change-password",
+            json={"new_password": "weak", "confirm_password": "weak"},
+        )
+        assert resp.status_code == 400
+    finally:
+        fastapi_app.dependency_overrides.pop(admins_mod.admin_ctx_relaxed, None)

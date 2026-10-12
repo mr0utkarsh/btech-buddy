@@ -22,9 +22,13 @@ interface AuthContextValue {
   session: { access_token: string } | null;
   role: AdminRole;
   adminLoading: boolean;
+  /** True when the signed-in admin must change a temporary password first. */
+  mustChangePassword: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshRole: () => Promise<void>;
+  /** Clears the local must-change-password flag after a successful change. */
+  passwordChanged: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -36,26 +40,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
   const [role, setRole] = useState<AdminRole>(null);
   const [adminLoading, setAdminLoading] = useState(true);
+  const [mustChangePassword, setMustChangePassword] = useState(false);
 
   const refreshRole = useCallback(async () => {
     const token = session?.access_token ?? null;
     if (!token) {
       setRole(null);
+      setMustChangePassword(false);
       setAdminToken(null);
       return;
     }
     setAdminToken(token);
     try {
-      const res = await api.get<{ role: string }>("/api/admin/admins/me");
+      const res = await api.get<{
+        role: string;
+        must_change_password?: boolean;
+      }>("/api/admin/admins/me");
       if (res.role === "super_admin" || res.role === "admin") {
         setRole(res.role);
+        setMustChangePassword(Boolean(res.must_change_password));
       } else {
         setRole(null);
+        setMustChangePassword(false);
       }
     } catch {
       setRole(null);
+      setMustChangePassword(false);
     }
   }, [session]);
+
+  const passwordChanged = useCallback(() => setMustChangePassword(false), []);
 
   useEffect(() => {
     let mounted = true;
@@ -88,6 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setSession(null);
           setUser(null);
           setRole(null);
+          setMustChangePassword(false);
           setAdminToken(null);
         }
       }
@@ -100,7 +115,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (session) refreshRole();
-    else setRole(null);
+    else {
+      setRole(null);
+      setMustChangePassword(false);
+    }
   }, [session, refreshRole]);
 
   const signIn = useCallback(
@@ -119,6 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null);
     setUser(null);
     setRole(null);
+    setMustChangePassword(false);
     setAdminToken(null);
   }, []);
 
@@ -128,11 +147,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       session,
       role,
       adminLoading,
+      mustChangePassword,
       signIn,
       signOut,
       refreshRole,
+      passwordChanged,
     }),
-    [user, session, role, adminLoading, signIn, signOut, refreshRole]
+    [
+      user,
+      session,
+      role,
+      adminLoading,
+      mustChangePassword,
+      signIn,
+      signOut,
+      refreshRole,
+      passwordChanged,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

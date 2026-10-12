@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Check, Monitor, Moon, Sun, Sparkles } from "lucide-react";
+import { Check, Monitor, Moon, Sun, Sparkles, ShieldCheck } from "lucide-react";
 import { useTheme, THEMES, type ThemeMeta, type ThemeName } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
+import { ChangePasswordForm } from "../components/ChangePasswordForm";
 
 // A tiny icon per theme for the card header.
 const THEME_ICONS: Record<ThemeName, typeof Moon> = {
@@ -109,7 +110,8 @@ function ThemePreviewCard({
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, role } = useAuth();
+  const isAdmin = role === "super_admin" || role === "admin";
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
@@ -169,6 +171,26 @@ export function Settings() {
             </li>
           </ul>
         </div>
+
+        {/* Security — change password (admins only) */}
+        {isAdmin && (
+          <div className="mt-8">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent">
+                <ShieldCheck className="h-6 w-6" />
+              </span>
+              <div>
+                <h2 className="font-display text-2xl font-bold text-fg">
+                  Security
+                </h2>
+                <p className="mt-1 text-fg-muted">
+                  Update the password for your admin account.
+                </p>
+              </div>
+            </div>
+            <ChangePasswordForm variant="card" />
+          </div>
+        )}
       </motion.div>
     </div>
   );

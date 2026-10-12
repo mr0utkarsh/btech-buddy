@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     max_upload_mb: int = 50
     max_pdf_pages: int = 300
 
-    watermark_text: str = "BTech Buddy"
+    watermark_text: str = "Evee bhaiya"
     watermark_opacity: float = 0.12
     watermark_angle: float = 45.0
 

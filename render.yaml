@@ -36,6 +36,6 @@ services:
       - key: MAX_PDF_PAGES
         value: "300"
       - key: WATERMARK_TEXT
-        value: BTech Buddy
+        value: Evee bhaiya
       - key: STORAGE_BUCKET
         value: pdfs

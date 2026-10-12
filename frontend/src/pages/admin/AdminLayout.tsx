@@ -17,6 +17,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { Logo } from "../../components/Logo";
+import { ChangePasswordForm } from "../../components/ChangePasswordForm";
 import { Unauthorized } from "../../pages/Auth";
 
 const nav = [
@@ -30,7 +31,7 @@ const nav = [
 ];
 
 export function AdminLayout() {
-  const { user, role, adminLoading, signOut } = useAuth();
+  const { user, role, adminLoading, mustChangePassword, signOut } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -51,6 +52,33 @@ export function AdminLayout() {
     toast.info("Signed out");
     navigate("/login");
   };
+
+  // Forced first-login password change: block the dashboard until complete.
+  if (mustChangePassword) {
+    return (
+      <div className="flex min-h-screen flex-col bg-surface-2">
+        <header className="flex h-16 items-center justify-between border-b border-line bg-header px-4 backdrop-blur-xl sm:px-6">
+          <Logo size="sm" />
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium text-fg-muted transition hover:bg-rose-50 hover:text-rose-700"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </header>
+        <main className="flex flex-1 items-center justify-center px-4 py-10">
+          <div className="w-full max-w-md">
+            <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              You signed in with a temporary password. Set a new password to
+              continue to the dashboard.
+            </div>
+            <ChangePasswordForm onSuccess={() => window.location.reload()} />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   const sidebar = (
     <div className="flex h-full flex-col">

@@ -11,6 +11,48 @@ import {
 import { api } from "../lib/api";
 import { useToast } from "../context/ToastContext";
 
+const ADMIN_CONTACT_EMAIL = "vishalkumar829987@gmail.com";
+
+interface ContactCard {
+  icon: typeof Mail;
+  title: string;
+  email?: string;
+  lines: string[];
+}
+
+const CONTACT_CARDS: ContactCard[] = [
+  {
+    icon: Mail,
+    title: "Admin contact",
+    email: ADMIN_CONTACT_EMAIL,
+    lines: ["Replies within 48 hours"],
+  },
+  {
+    icon: MapPin,
+    title: "Coverage",
+    lines: [
+      "Shri Mata Vaishno Devi University, Katra",
+      "CSE · AI & Robotics specialization",
+    ],
+  },
+  {
+    icon: Clock,
+    title: "Upload requests",
+    lines: [
+      "Mention subject, semester, year & exam type",
+      "Verified admins add papers weekly",
+    ],
+  },
+  {
+    icon: MessageSquareText,
+    title: "Report an issue",
+    lines: [
+      "Broken links, wrong metadata",
+      "Copyright concerns: see our DMCA page",
+    ],
+  },
+];
+
 export function Contact() {
   const toast = useToast();
   const [form, setForm] = useState({
@@ -199,37 +241,7 @@ export function Contact() {
 
         {/* Info cards */}
         <div className="space-y-4">
-          {[
-            {
-              icon: Mail,
-              title: "Email",
-              lines: ["hello@btechbuddy.in", "We reply within 48 hours"],
-            },
-            {
-              icon: MapPin,
-              title: "Coverage",
-              lines: [
-                "Shri Mata Vaishno Devi University, Katra",
-                "CSE · AI & Robotics specialization",
-              ],
-            },
-            {
-              icon: Clock,
-              title: "Upload requests",
-              lines: [
-                "Mention subject, semester, year & exam type",
-                "Verified admins add papers weekly",
-              ],
-            },
-            {
-              icon: MessageSquareText,
-              title: "Report an issue",
-              lines: [
-                "Broken links, wrong metadata",
-                "Copyright concerns: see our DMCA page",
-              ],
-            },
-          ].map((card, i) => (
+          {CONTACT_CARDS.map((card, i) => (
             <motion.div
               key={card.title}
               initial={{ opacity: 0, x: 24 }}
@@ -244,6 +256,14 @@ export function Contact() {
                 <h3 className="font-display text-sm font-semibold text-fg">
                   {card.title}
                 </h3>
+                {card.email && (
+                  <a
+                    href={`mailto:${card.email}`}
+                    className="mt-0.5 block break-all text-sm font-medium text-accent underline-offset-2 hover:underline"
+                  >
+                    {card.email}
+                  </a>
+                )}
                 {card.lines.map((line, j) => (
                   <p
                     key={j}

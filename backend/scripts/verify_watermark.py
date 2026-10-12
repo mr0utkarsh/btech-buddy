@@ -14,13 +14,13 @@ buf = io.BytesIO()
 doc.save(buf)
 doc.close()
 
-out = add_watermark(buf.getvalue(), text="BTech Buddy", opacity=0.12, angle=45)
+out = add_watermark(buf.getvalue(), text="Evee bhaiya", opacity=0.12, angle=45)
 
 d = fitz.open(stream=out, filetype="pdf")
 print("pages:", d.page_count)
 for i, page in enumerate(d):
     text = page.get_text()
-    assert "BTech Buddy" in text, f"watermark missing on page {i}"
+    assert "Evee bhaiya" in text, f"watermark missing on page {i}"
     pix = page.get_pixmap(dpi=60)
     pix.save(f"C:/Users/Utkarsh/AppData/Local/Temp/kilo/wm_page{i}.png")
     # measure ink coverage to confirm the watermark actually renders
