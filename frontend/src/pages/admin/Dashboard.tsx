@@ -54,16 +54,16 @@ export function Dashboard() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-fg sm:text-3xl">
             Dashboard
           </h1>
-          <p className="mt-1 text-sm text-navy-600">
+          <p className="mt-1 text-sm text-fg-muted">
             Real-time overview of your paper library
           </p>
         </div>
         <Link
           to="/admin/papers/upload"
-          className="flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700"
+          className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover"
         >
           <UploadCloud className="h-4 w-4" />
           Upload paper
@@ -115,21 +115,21 @@ export function Dashboard() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.06 }}
-                className="group relative overflow-hidden rounded-2xl border border-navy-100 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
+                className="group relative overflow-hidden rounded-2xl border border-line bg-surface p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
               >
                 <div className="flex items-start justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-soft text-accent">
                     <card.icon className="h-5 w-5" />
                   </span>
-                  <ArrowUpRight className="h-4 w-4 text-navy-300 transition group-hover:text-brand-500" />
+                  <ArrowUpRight className="h-4 w-4 text-fg-muted transition group-hover:text-accent" />
                 </div>
-                <p className="mt-3 font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+                <p className="mt-3 font-display text-2xl font-bold text-fg sm:text-3xl">
                   {card.value}
                 </p>
-                <p className="mt-0.5 text-sm font-medium text-navy-700">
+                <p className="mt-0.5 text-sm font-medium text-fg-muted">
                   {card.label}
                 </p>
-                <p className="mt-1 text-xs text-navy-500">
+                <p className="mt-1 text-xs text-fg-subtle">
                   {card.sub}
                 </p>
                 <Link
@@ -147,14 +147,14 @@ export function Dashboard() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.15 }}
-          className="rounded-2xl border border-navy-100 bg-white p-5 shadow-soft lg:col-span-2"
+          className="rounded-2xl border border-line bg-surface p-5 shadow-soft lg:col-span-2"
         >
           <div className="flex items-center justify-between">
-            <h2 className="flex items-center gap-2 font-display text-base font-semibold text-navy-950">
-              <TrendingUp className="h-5 w-5 text-brand-600" />
+            <h2 className="flex items-center gap-2 font-display text-base font-semibold text-fg">
+              <TrendingUp className="h-5 w-5 text-accent" />
               Downloads — last 7 days
             </h2>
-            <span className="text-xs text-navy-500">
+            <span className="text-xs text-fg-subtle">
               {stats?.overview.downloads_last_7_days ?? 0} total
             </span>
           </div>
@@ -172,16 +172,16 @@ export function Dashboard() {
                   key={day.date}
                   className="group flex flex-1 flex-col items-center gap-1.5"
                 >
-                  <span className="text-[11px] font-semibold text-navy-700 opacity-0 transition group-hover:opacity-100">
+                  <span className="text-[11px] font-semibold text-fg-muted opacity-0 transition group-hover:opacity-100">
                     {day.downloads}
                   </span>
                   <motion.div
                     initial={{ height: 0 }}
                     animate={{ height: `${height}%` }}
                     transition={{ duration: 0.5, delay: 0.2 + i * 0.05 }}
-                    className="w-full max-w-12 rounded-t-lg bg-gradient-to-t from-brand-600 to-sky-400"
+                    className="w-full max-w-12 rounded-t-lg bg-gradient-to-t from-accent to-sky-400"
                   />
-                  <span className="text-[10px] text-navy-500 sm:text-[11px]">
+                  <span className="text-[10px] text-fg-subtle sm:text-[11px]">
                     {new Date(day.date + "T00:00:00").toLocaleDateString(
                       "en-IN",
                       { day: "numeric", month: "short" }
@@ -198,10 +198,10 @@ export function Dashboard() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="rounded-2xl border border-navy-100 bg-white p-5 shadow-soft"
+          className="rounded-2xl border border-line bg-surface p-5 shadow-soft"
         >
-          <h2 className="flex items-center gap-2 font-display text-base font-semibold text-navy-950">
-            <Clock className="h-5 w-5 text-brand-600" />
+          <h2 className="flex items-center gap-2 font-display text-base font-semibold text-fg">
+            <Clock className="h-5 w-5 text-accent" />
             Recent uploads
           </h2>
           <ul className="mt-4 space-y-3">
@@ -211,14 +211,14 @@ export function Dashboard() {
                   to={`/papers/${paper.id}`}
                   className="group flex items-start gap-3"
                 >
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
                     <FileText className="h-4 w-4" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-sm font-medium text-navy-900 group-hover:text-brand-700">
+                    <span className="block truncate text-sm font-medium text-fg group-hover:text-accent">
                       {paper.subject_name}
                     </span>
-                    <span className="block truncate text-xs text-navy-500">
+                    <span className="block truncate text-xs text-fg-subtle">
                       {paper.institutions?.short_name} · Sem{" "}
                       {paper.semester} · {timeAgo(paper.created_at)}
                     </span>
@@ -227,7 +227,7 @@ export function Dashboard() {
               </li>
             ))}
             {(!stats?.recent_uploads || stats.recent_uploads.length === 0) && !loading && (
-              <li className="rounded-xl bg-navy-50 px-4 py-3 text-center text-xs text-navy-500">
+              <li className="rounded-xl bg-surface-2 px-4 py-3 text-center text-xs text-fg-subtle">
                 No uploads yet
               </li>
             )}
@@ -240,16 +240,16 @@ export function Dashboard() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.25 }}
-        className="mt-6 overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-soft"
+        className="mt-6 overflow-hidden rounded-2xl border border-line bg-surface shadow-soft"
       >
-        <div className="flex items-center justify-between border-b border-navy-100 px-5 py-4">
-          <h2 className="flex items-center gap-2 font-display text-base font-semibold text-navy-950">
-            <GraduationCap className="h-5 w-5 text-brand-600" />
+        <div className="flex items-center justify-between border-b border-line px-5 py-4">
+          <h2 className="flex items-center gap-2 font-display text-base font-semibold text-fg">
+            <GraduationCap className="h-5 w-5 text-accent" />
             Most downloaded papers
           </h2>
           <Link
             to="/admin/papers"
-            className="text-xs font-semibold text-brand-700 hover:underline"
+            className="text-xs font-semibold text-accent hover:underline"
           >
             View all
           </Link>
@@ -257,7 +257,7 @@ export function Dashboard() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead>
-              <tr className="border-b border-navy-100 text-xs uppercase tracking-wider text-navy-400">
+              <tr className="border-b border-line text-xs uppercase tracking-wider text-fg-subtle">
                 <th className="px-5 py-3 font-semibold">#</th>
                 <th className="px-5 py-3 font-semibold">Paper</th>
                 <th className="px-5 py-3 font-semibold">Institution</th>
@@ -269,39 +269,39 @@ export function Dashboard() {
                 <th className="px-5 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-navy-50">
+            <tbody className="divide-y divide-line">
               {(stats?.top_papers || []).map((paper, i) => (
                 <tr
                   key={paper.id}
-                  className="transition hover:bg-navy-50/60"
+                  className="transition hover:bg-surface-2/60"
                 >
-                  <td className="px-5 py-3.5 font-display font-bold text-navy-300">
+                  <td className="px-5 py-3.5 font-display font-bold text-fg-muted">
                     {i + 1}
                   </td>
                   <td className="px-5 py-3.5">
-                    <p className="font-medium text-navy-900">
+                    <p className="font-medium text-fg">
                       {paper.subject_name}
                     </p>
-                    <p className="text-xs text-navy-500">
+                    <p className="text-xs text-fg-subtle">
                       {paper.branches?.name} · {paper.exam_year}
                     </p>
                   </td>
-                  <td className="px-5 py-3.5 text-navy-700">
+                  <td className="px-5 py-3.5 text-fg-muted">
                     {paper.institutions?.short_name}
                   </td>
-                  <td className="px-5 py-3.5 text-navy-700">
+                  <td className="px-5 py-3.5 text-fg-muted">
                     {paper.semester}
                   </td>
-                  <td className="px-5 py-3.5 text-navy-700">
+                  <td className="px-5 py-3.5 text-fg-muted">
                     {formatBytes(paper.file_size_bytes)}
                   </td>
-                  <td className="px-5 py-3.5 text-right font-semibold text-navy-900">
+                  <td className="px-5 py-3.5 text-right font-semibold text-fg">
                     {formatNumber(paper.download_count)}
                   </td>
                   <td className="px-5 py-3.5 text-right">
                     <Link
                       to={`/papers/${paper.id}`}
-                      className="inline-flex items-center gap-1 rounded-lg border border-navy-200 px-2.5 py-1.5 text-xs font-semibold text-navy-700 transition hover:border-brand-400 hover:text-brand-700"
+                      className="inline-flex items-center gap-1 rounded-lg border border-line px-2.5 py-1.5 text-xs font-semibold text-fg-muted transition hover:border-accent hover:text-accent"
                     >
                       <Eye className="h-3.5 w-3.5" />
                       View
@@ -313,7 +313,7 @@ export function Dashboard() {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-5 py-8 text-center text-sm text-navy-500"
+                    className="px-5 py-8 text-center text-sm text-fg-subtle"
                   >
                     No papers yet — upload the first one.
                   </td>
@@ -324,7 +324,7 @@ export function Dashboard() {
         </div>
       </motion.div>
 
-      <p className="mt-4 flex items-center gap-1.5 text-xs text-navy-400">
+      <p className="mt-4 flex items-center gap-1.5 text-xs text-fg-subtle">
         <Clock className="h-3.5 w-3.5" />
         Last refreshed:{" "}
         {formatDate(new Date().toISOString())}{" "}

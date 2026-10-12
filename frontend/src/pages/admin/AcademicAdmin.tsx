@@ -194,18 +194,18 @@ export function AcademicAdmin() {
     `mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm transition focus:outline-none ${
       hasError
         ? "border-rose-300 bg-rose-50"
-        : "border-navy-200 bg-white focus:border-brand-400"
+        : "border-line bg-surface focus:border-accent"
     }`;
-  const labelClass = "text-sm font-semibold text-navy-900";
+  const labelClass = "text-sm font-semibold text-fg";
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-fg sm:text-3xl">
             Branches & Subjects
           </h1>
-          <p className="mt-1 text-sm text-navy-600">
+          <p className="mt-1 text-sm text-fg-muted">
             {branches.length} branches · {subjects.length} subjects in
             the catalog
           </p>
@@ -213,14 +213,14 @@ export function AcademicAdmin() {
         <div className="flex gap-2">
           <button
             onClick={openBranchCreate}
-            className="flex items-center gap-2 rounded-xl border border-navy-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-800 shadow-soft transition hover:bg-navy-50"
+            className="flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-bold text-fg shadow-soft transition hover:bg-surface-2"
           >
             <Plus className="h-4 w-4" />
             Branch
           </button>
           <button
             onClick={openSubjectCreate}
-            className="flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700"
+            className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover"
           >
             <Plus className="h-4 w-4" />
             Subject
@@ -233,11 +233,11 @@ export function AcademicAdmin() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mt-6 rounded-2xl border border-navy-100 bg-white shadow-soft"
+        className="mt-6 rounded-2xl border border-line bg-surface shadow-soft"
       >
-        <div className="flex items-center gap-2 border-b border-navy-100 px-5 py-4">
-          <Building2 className="h-5 w-5 text-brand-600" />
-          <h2 className="font-display text-base font-semibold text-navy-950">
+        <div className="flex items-center gap-2 border-b border-line px-5 py-4">
+          <Building2 className="h-5 w-5 text-accent" />
+          <h2 className="font-display text-base font-semibold text-fg">
             Branches
           </h2>
         </div>
@@ -246,7 +246,7 @@ export function AcademicAdmin() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="h-20 animate-pulse rounded-xl bg-navy-50"
+                className="h-20 animate-pulse rounded-xl bg-surface-2"
               />
             ))}
           </div>
@@ -255,17 +255,17 @@ export function AcademicAdmin() {
             {branches.map((b) => (
               <div
                 key={b.id}
-                className="group flex items-center justify-between rounded-xl border border-navy-100 bg-navy-50/50 px-4 py-3.5 transition hover:border-brand-300"
+                className="group flex items-center justify-between rounded-xl border border-line bg-surface-2/50 px-4 py-3.5 transition hover:border-accent"
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 font-display text-xs font-bold text-brand-700">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-soft font-display text-xs font-bold text-accent">
                     {(b.code || b.name.slice(0, 2)).toUpperCase()}
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-navy-900">
+                    <p className="text-sm font-semibold text-fg">
                       {b.name}
                     </p>
-                    <p className="text-xs text-navy-500">
+                    <p className="text-xs text-fg-subtle">
                       {subjects.filter((s) => s.branch_id === b.id).length}{" "}
                       subjects
                     </p>
@@ -274,14 +274,14 @@ export function AcademicAdmin() {
                 <div className="flex gap-1 opacity-0 transition group-hover:opacity-100">
                   <button
                     onClick={() => openBranchEdit(b)}
-                    className="rounded-lg p-1.5 text-navy-500 transition hover:bg-brand-50 hover:text-brand-700"
+                    className="rounded-lg p-1.5 text-fg-subtle transition hover:bg-accent-soft hover:text-accent"
                     aria-label={`Edit ${b.name}`}
                   >
                     <Pencil className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => setDeletingBranch(b)}
-                    className="rounded-lg p-1.5 text-navy-500 transition hover:bg-rose-50 hover:text-rose-700"
+                    className="rounded-lg p-1.5 text-fg-subtle transition hover:bg-rose-50 hover:text-rose-700"
                     aria-label={`Delete ${b.name}`}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -298,17 +298,17 @@ export function AcademicAdmin() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
-        className="mt-6 rounded-2xl border border-navy-100 bg-white shadow-soft"
+        className="mt-6 rounded-2xl border border-line bg-surface shadow-soft"
       >
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-navy-100 px-5 py-4">
-          <h2 className="flex items-center gap-2 font-display text-base font-semibold text-navy-950">
-            <BookOpen className="h-5 w-5 text-brand-600" />
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
+          <h2 className="flex items-center gap-2 font-display text-base font-semibold text-fg">
+            <BookOpen className="h-5 w-5 text-accent" />
             Subjects
           </h2>
           <select
             value={subjectFilter}
             onChange={(e) => setSubjectFilter(e.target.value)}
-            className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm focus:border-brand-400 focus:outline-none"
+            className="rounded-lg border border-line bg-surface px-3 py-2 text-sm focus:border-accent focus:outline-none"
             aria-label="Filter subjects by branch"
           >
             <option value="">All branches</option>
@@ -324,19 +324,19 @@ export function AcademicAdmin() {
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="h-12 animate-pulse rounded-xl bg-navy-50"
+                className="h-12 animate-pulse rounded-xl bg-surface-2"
               />
             ))}
           </div>
         ) : filteredSubjects.length === 0 ? (
-          <p className="p-8 text-center text-sm text-navy-500">
+          <p className="p-8 text-center text-sm text-fg-subtle">
             No subjects found.
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] text-left text-sm">
               <thead>
-                <tr className="border-b border-navy-100 text-xs uppercase tracking-wider text-navy-400">
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-fg-subtle">
                   <th className="px-5 py-3 font-semibold">Subject</th>
                   <th className="px-5 py-3 font-semibold">Branch</th>
                   <th className="px-5 py-3 font-semibold">Sem</th>
@@ -346,29 +346,29 @@ export function AcademicAdmin() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-navy-50">
+              <tbody className="divide-y divide-line">
                 {filteredSubjects.map((s) => (
-                  <tr key={s.id} className="transition hover:bg-navy-50/60">
-                    <td className="px-5 py-3 font-medium text-navy-900">
+                  <tr key={s.id} className="transition hover:bg-surface-2/60">
+                    <td className="px-5 py-3 font-medium text-fg">
                       {s.name}
                     </td>
-                    <td className="px-5 py-3 text-navy-700">
+                    <td className="px-5 py-3 text-fg-muted">
                       {branches.find((b) => b.id === s.branch_id)?.name || "—"}
                     </td>
-                    <td className="px-5 py-3 text-navy-700">{s.semester}</td>
-                    <td className="px-5 py-3 text-navy-500">{s.code || "—"}</td>
+                    <td className="px-5 py-3 text-fg-muted">{s.semester}</td>
+                    <td className="px-5 py-3 text-fg-subtle">{s.code || "—"}</td>
                     <td className="px-5 py-3">
                       <div className="flex justify-end gap-1">
                         <button
                           onClick={() => openSubjectEdit(s)}
-                          className="rounded-lg p-2 text-navy-500 transition hover:bg-brand-50 hover:text-brand-700"
+                          className="rounded-lg p-2 text-fg-subtle transition hover:bg-accent-soft hover:text-accent"
                           aria-label={`Edit ${s.name}`}
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => setDeletingSubject(s)}
-                          className="rounded-lg p-2 text-navy-500 transition hover:bg-rose-50 hover:text-rose-700"
+                          className="rounded-lg p-2 text-fg-subtle transition hover:bg-rose-50 hover:text-rose-700"
                           aria-label={`Delete ${s.name}`}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -401,7 +401,7 @@ export function AcademicAdmin() {
         )}
         <div className="mt-4">
           <label className={labelClass}>
-            Code <span className="font-normal text-navy-400">(optional)</span>
+            Code <span className="font-normal text-fg-subtle">(optional)</span>
           </label>
           <input
             value={branchForm.code}
@@ -413,14 +413,14 @@ export function AcademicAdmin() {
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setBranchModal(false)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={saveBranch}
             disabled={saving}
-            className="flex-1 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-accent-hover disabled:opacity-60"
           >
             {saving ? "Saving…" : editingBranch ? "Save" : "Add branch"}
           </button>
@@ -481,7 +481,7 @@ export function AcademicAdmin() {
         </div>
         <div className="mt-4">
           <label className={labelClass}>
-            Code <span className="font-normal text-navy-400">(optional)</span>
+            Code <span className="font-normal text-fg-subtle">(optional)</span>
           </label>
           <input
             value={subjectForm.code}
@@ -493,14 +493,14 @@ export function AcademicAdmin() {
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setSubjectModal(false)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={saveSubject}
             disabled={saving}
-            className="flex-1 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-accent-hover disabled:opacity-60"
           >
             {saving ? "Saving…" : editingSubject ? "Save" : "Add subject"}
           </button>
@@ -513,20 +513,20 @@ export function AcademicAdmin() {
         onClose={() => setDeletingBranch(null)}
         title="Delete branch"
       >
-        <p className="text-sm text-navy-700">
+        <p className="text-sm text-fg-muted">
           Delete <strong>{deletingBranch?.name}</strong>? Its subjects
           will also be removed. Blocked while papers reference it.
         </p>
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setDeletingBranch(null)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={deleteBranch}
-            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-700"
+            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-rose-700"
           >
             Delete
           </button>
@@ -538,20 +538,20 @@ export function AcademicAdmin() {
         onClose={() => setDeletingSubject(null)}
         title="Delete subject"
       >
-        <p className="text-sm text-navy-700">
+        <p className="text-sm text-fg-muted">
           Delete <strong>{deletingSubject?.name}</strong>? Blocked while
           papers reference it.
         </p>
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setDeletingSubject(null)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={deleteSubject}
-            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-700"
+            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-rose-700"
           >
             Delete
           </button>

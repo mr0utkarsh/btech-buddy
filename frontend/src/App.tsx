@@ -8,6 +8,7 @@ import { Preview } from "./pages/Preview";
 import { Contact } from "./pages/Contact";
 import { FAQ } from "./pages/FAQ";
 import { Login, SetupAdmin, NotFound, Unauthorized } from "./pages/Auth";
+import { Settings } from "./pages/Settings";
 import {
   PrivacyPolicy,
   TermsOfService,
@@ -46,6 +47,7 @@ export default function App() {
         <Route path="papers/:id/preview" element={<PageTitle title="PDF Preview — BTech Buddy"><Preview /></PageTitle>} />
         <Route path="contact" element={<PageTitle title="Contact — BTech Buddy"><Contact /></PageTitle>} />
         <Route path="faq" element={<PageTitle title="FAQ — BTech Buddy"><FAQ /></PageTitle>} />
+        <Route path="settings" element={<PageTitle title="Appearance — BTech Buddy"><Settings /></PageTitle>} />
         <Route path="privacy" element={<PageTitle title="Privacy Policy — BTech Buddy"><PrivacyPolicy /></PageTitle>} />
         <Route path="terms" element={<PageTitle title="Terms of Service — BTech Buddy"><TermsOfService /></PageTitle>} />
         <Route path="copyright" element={<PageTitle title="Copyright & DMCA — BTech Buddy"><CopyrightPolicy /></PageTitle>} />

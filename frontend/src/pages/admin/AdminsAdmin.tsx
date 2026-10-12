@@ -128,17 +128,17 @@ export function AdminsAdmin() {
     `mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm transition focus:outline-none ${
       hasError
         ? "border-rose-300 bg-rose-50"
-        : "border-navy-200 bg-white focus:border-brand-400"
+        : "border-line bg-surface focus:border-accent"
     }`;
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-fg sm:text-3xl">
             Admin management
           </h1>
-          <p className="mt-1 text-sm text-navy-600">
+          <p className="mt-1 text-sm text-fg-muted">
             {admins.filter((a) => a.active).length} active ·{" "}
             {admins.filter((a) => !a.active).length} revoked
             {isSuperAdmin
@@ -148,7 +148,7 @@ export function AdminsAdmin() {
         </div>
         <button
           onClick={() => setInviteOpen(true)}
-          className="flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700"
+          className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover"
         >
           <UserPlus className="h-4 w-4" />
           Invite admin
@@ -167,26 +167,26 @@ export function AdminsAdmin() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mt-5 overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-soft"
+        className="mt-5 overflow-hidden rounded-2xl border border-line bg-surface shadow-soft"
       >
         {loading ? (
           <div className="space-y-2 p-5">
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="h-16 animate-pulse rounded-xl bg-navy-50"
+                className="h-16 animate-pulse rounded-xl bg-surface-2"
               />
             ))}
           </div>
         ) : admins.length === 0 ? (
-          <p className="p-10 text-center text-sm text-navy-500">
+          <p className="p-10 text-center text-sm text-fg-subtle">
             No admins yet.
           </p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[680px] text-left text-sm">
               <thead>
-                <tr className="border-b border-navy-100 text-xs uppercase tracking-wider text-navy-400">
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-fg-subtle">
                   <th className="px-5 py-3.5 font-semibold">Admin</th>
                   <th className="px-5 py-3.5 font-semibold">Role</th>
                   <th className="px-5 py-3.5 font-semibold">Status</th>
@@ -196,30 +196,30 @@ export function AdminsAdmin() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-navy-50">
+              <tbody className="divide-y divide-line">
                 {admins.map((admin) => (
-                  <tr key={admin.user_id} className="transition hover:bg-navy-50/60">
+                  <tr key={admin.user_id} className="transition hover:bg-surface-2/60">
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
                         <span
                           className={`flex h-9 w-9 items-center justify-center rounded-full font-display text-xs font-bold ${
                             admin.role === "super_admin"
-                              ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white"
-                              : "bg-brand-100 text-brand-800"
+                              ? "bg-gradient-to-br from-amber-400 to-orange-500 text-accent-fg"
+                              : "bg-accent-soft text-accent"
                           }`}
                         >
                           {admin.email.slice(0, 2).toUpperCase()}
                         </span>
                         <div>
-                          <p className="font-medium text-navy-900">
+                          <p className="font-medium text-fg">
                             {admin.email}
                             {admin.user_id === user?.id && (
-                              <span className="ml-1.5 rounded-full bg-navy-50 px-2 py-0.5 text-[10px] font-semibold text-navy-600">
+                              <span className="ml-1.5 rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-semibold text-fg-muted">
                                 you
                               </span>
                             )}
                           </p>
-                          <p className="text-xs text-navy-500">
+                          <p className="text-xs text-fg-subtle">
                             ID: {admin.user_id.slice(0, 8)}…
                           </p>
                         </div>
@@ -230,7 +230,7 @@ export function AdminsAdmin() {
                         className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
                           admin.role === "super_admin"
                             ? "bg-amber-50 text-amber-700"
-                            : "bg-navy-50 text-navy-700"
+                            : "bg-surface-2 text-fg-muted"
                         }`}
                       >
                         {admin.role === "super_admin" ? (
@@ -257,7 +257,7 @@ export function AdminsAdmin() {
                         </span>
                       )}
                     </td>
-                    <td className="px-5 py-3.5 text-xs text-navy-500">
+                    <td className="px-5 py-3.5 text-xs text-fg-subtle">
                       {formatDate(admin.created_at)}
                     </td>
                     <td className="px-5 py-3.5">
@@ -275,7 +275,7 @@ export function AdminsAdmin() {
                                       : "super_admin",
                                 })
                               }
-                              className="rounded-lg p-2 text-navy-500 transition hover:bg-amber-50 hover:text-amber-700"
+                              className="rounded-lg p-2 text-fg-subtle transition hover:bg-amber-50 hover:text-amber-700"
                               title="Change role"
                               aria-label={`Change role of ${admin.email}`}
                             >
@@ -287,7 +287,7 @@ export function AdminsAdmin() {
                             onClick={() =>
                               setConfirmState({ action: "revoke", admin })
                             }
-                            className="rounded-lg p-2 text-navy-500 transition hover:bg-amber-50 hover:text-amber-700"
+                            className="rounded-lg p-2 text-fg-subtle transition hover:bg-amber-50 hover:text-amber-700"
                             title="Revoke access"
                             aria-label={`Revoke ${admin.email}`}
                           >
@@ -299,7 +299,7 @@ export function AdminsAdmin() {
                             onClick={() =>
                               setConfirmState({ action: "restore", admin })
                             }
-                            className="rounded-lg p-2 text-navy-500 transition hover:bg-emerald-50 hover:text-emerald-700"
+                            className="rounded-lg p-2 text-fg-subtle transition hover:bg-emerald-50 hover:text-emerald-700"
                             title="Restore access"
                             aria-label={`Restore ${admin.email}`}
                           >
@@ -311,7 +311,7 @@ export function AdminsAdmin() {
                             onClick={() =>
                               setConfirmState({ action: "delete", admin })
                             }
-                            className="rounded-lg p-2 text-navy-500 transition hover:bg-rose-50 hover:text-rose-700"
+                            className="rounded-lg p-2 text-fg-subtle transition hover:bg-rose-50 hover:text-rose-700"
                             title="Remove admin"
                             aria-label={`Remove ${admin.email}`}
                           >
@@ -335,7 +335,7 @@ export function AdminsAdmin() {
         title="Invite an admin"
       >
         <div>
-          <label className="text-sm font-semibold text-navy-900">
+          <label className="text-sm font-semibold text-fg">
             Email address
           </label>
           <input
@@ -352,21 +352,21 @@ export function AdminsAdmin() {
           )}
         </div>
         <div className="mt-4">
-          <label className="text-sm font-semibold text-navy-900">
+          <label className="text-sm font-semibold text-fg">
             Role
           </label>
           <select
             value={inviteForm.role}
             disabled={!isSuperAdmin}
             onChange={(e) => setInviteForm({ ...inviteForm, role: e.target.value })}
-            className="mt-1.5 w-full rounded-xl border border-navy-200 bg-white px-3.5 py-2.5 text-sm transition focus:border-brand-400 focus:outline-none disabled:opacity-60"
+            className="mt-1.5 w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm transition focus:border-accent focus:outline-none disabled:opacity-60"
           >
             <option value="admin">Admin</option>
             <option value="super_admin">
               Super Admin {isSuperAdmin ? "" : "(super admin only)"}
             </option>
           </select>
-          <p className="mt-1 text-xs text-navy-400">
+          <p className="mt-1 text-xs text-fg-subtle">
             {isSuperAdmin
               ? "Super admins can manage roles and other super admins."
               : "Only the super admin can assign the super-admin role."}
@@ -375,14 +375,14 @@ export function AdminsAdmin() {
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setInviteOpen(false)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={invite}
             disabled={inviting}
-            className="flex-1 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-accent-hover disabled:opacity-60"
           >
             {inviting ? "Sending…" : "Send invite"}
           </button>
@@ -395,30 +395,30 @@ export function AdminsAdmin() {
         onClose={() => setTempPassword(null)}
         title="Temporary password"
       >
-        <p className="text-sm text-navy-700">
+        <p className="text-sm text-fg-muted">
           A temporary password was generated for the new
           admin. Share it through a secure channel — it is
           shown only once.
         </p>
-        <div className="mt-4 flex items-center gap-2 rounded-xl border border-navy-200 bg-navy-50 px-4 py-3">
-          <KeyRound className="h-4 w-4 shrink-0 text-brand-600" />
-          <code className="flex-1 break-all text-sm font-semibold text-navy-900">
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-line bg-surface-2 px-4 py-3">
+          <KeyRound className="h-4 w-4 shrink-0 text-accent" />
+          <code className="flex-1 break-all text-sm font-semibold text-fg">
             {tempPassword}
           </code>
           <button
             onClick={() => navigator.clipboard?.writeText(tempPassword || "")}
-            className="rounded-lg border border-navy-200 bg-white px-2.5 py-1 text-xs font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="rounded-lg border border-line bg-surface px-2.5 py-1 text-xs font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Copy
           </button>
         </div>
-        <p className="mt-3 text-xs text-navy-500">
+        <p className="mt-3 text-xs text-fg-subtle">
           The new admin must change their password after
           first sign-in via Supabase.
         </p>
         <button
           onClick={() => setTempPassword(null)}
-          className="mt-5 w-full rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-700"
+          className="mt-5 w-full rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-accent-hover"
         >
           Done
         </button>
@@ -438,7 +438,7 @@ export function AdminsAdmin() {
                 : "Remove admin"
         }
       >
-        <p className="text-sm text-navy-700">
+        <p className="text-sm text-fg-muted">
           {confirmState?.action === "revoke" && (
             <>
               Revoke admin access for{" "}
@@ -472,16 +472,16 @@ export function AdminsAdmin() {
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setConfirmState(null)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={runAction}
-            className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-bold text-white transition ${
+            className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-bold text-accent-fg transition ${
               confirmState?.action === "delete"
                 ? "bg-rose-600 hover:bg-rose-700"
-                : "bg-brand-600 hover:bg-brand-700"
+                : "bg-accent hover:bg-accent-hover"
             }`}
           >
             Confirm
@@ -490,7 +490,7 @@ export function AdminsAdmin() {
       </Modal>
 
       {/* Legend */}
-      <div className="mt-5 flex flex-wrap items-center gap-4 text-xs text-navy-500">
+      <div className="mt-5 flex flex-wrap items-center gap-4 text-xs text-fg-subtle">
         <span className="flex items-center gap-1.5">
           <Eye className="h-3.5 w-3.5" />
           Actions target other admins only

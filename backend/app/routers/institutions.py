@@ -12,6 +12,11 @@ from fastapi import APIRouter, Depends, Header
 
 from app.audit import log_activity
 from app.auth import require_admin
+from app.catalog import (
+    ALLOWED_BRANCH_CODE,
+    ALLOWED_SPECIALIZATIONS,
+    ALLOWED_UNIVERSITY_SHORT_NAME,
+)
 from app.database import (
     delete_row,
     insert_row,
@@ -31,7 +36,9 @@ async def admin_ctx(authorization: Optional[str] = Header(default=None)):
 # ------------------------------------------------------------- public read
 @router.get("/api/institutions")
 async def list_institutions(type: Optional[str] = None):
-    params: Dict[str, str] = {}
+    # Customer catalog: only SMVDU is exposed. Any other institution (legacy
+    # Kanpur data) is filtered out so the public API can never return it.
+    params: Dict[str, str] = {"short_name": f"eq.{ALLOWED_UNIVERSITY_SHORT_NAME}"}
     if type in ("university", "college", "institute"):
         params["type"] = f"eq.{type}"
     rows, _ = await select_rows(
@@ -42,7 +49,28 @@ async def list_institutions(type: Optional[str] = None):
 
 @router.get("/api/branches")
 async def list_branches():
-    rows, _ = await select_rows("branches", select="*", order="name.asc")
+    # Customer catalog: only the CSE branch is exposed.
+    rows, _ = await select_rows(
+        "branches",
+        select="*",
+        params={"code": f"eq.{ALLOWED_BRANCH_CODE}"},
+        order="name.asc",
+    )
+    return {"data": rows}
+
+
+@router.get("/api/specializations")
+async def list_specializations():
+    # Customer catalog: only the combined "AI and Robotics" specialization.
+    allowed = set(ALLOWED_SPECIALIZATIONS)
+    try:
+        rows, _ = await select_rows(
+            "specializations", select="*", order="name.asc"
+        )
+    except Exception:
+        # Table may not exist yet (migration 0006 not applied).
+        rows = []
+    rows = [r for r in rows if r.get("name") in allowed]
     return {"data": rows}
 
 
@@ -75,6 +103,12 @@ async def create_institution(
         raise BadRequestError("Short name must be 2-40 characters")
     if inst_type not in ("university", "college", "institute"):
         raise BadRequestError("Type must be university, college, or institute")
+
+    # Customer catalog: only SMVDU may exist. Block any other institution.
+    if short_name.strip().upper() != ALLOWED_UNIVERSITY_SHORT_NAME:
+        raise BadRequestError(
+            "Only Shri Mata Vaishno Devi University (SMVDU) is supported in this deployment"
+        )
 
     affiliated_to = payload.get("affiliated_to") or None
     if affiliated_to:
@@ -226,6 +260,11 @@ async def create_branch(
     code = str(payload.get("code", "")).strip().upper() or None
     if not (2 <= len(name) <= 90):
         raise BadRequestError("Branch name must be 2-90 characters")
+    # Customer catalog: only the CSE branch is supported.
+    if code != ALLOWED_BRANCH_CODE:
+        raise BadRequestError(
+            "Only the CSE branch is supported in this deployment"
+        )
     row = {"name": name, "code": code}
     try:
         created = await insert_row("branches", row)

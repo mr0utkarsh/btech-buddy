@@ -8,7 +8,7 @@ const FAQS = [
     items: [
       {
         q: "What is BTech Buddy?",
-        a: "BTech Buddy is a free library of previous-year question papers for engineering students at Kanpur institutions — CSJMU, HBTU, AKTU-affiliated colleges (PSIT, AITH, UPTTI, National Sugar Institute), Rama University, CSA University and IIT Kanpur.",
+        a: "BTech Buddy is a free library of previous-year question papers for Computer Science & Engineering students at Shri Mata Vaishno Devi University (SMVDU), Katra — focused on the AI & Robotics specialization.",
       },
       {
         q: "Do I need an account to download papers?",
@@ -29,15 +29,15 @@ const FAQS = [
     items: [
       {
         q: "How do I filter papers?",
-        a: "Use the Browse page filters: university/institution, branch, semester, exam type (regular, supply, improvement, preparatory) and year. Filters combine, and you can also search by subject name or paper code.",
+        a: "Use the Browse page filters: branch (CSE), specialization (AI & Robotics), semester, exam type (regular, supply, improvement, preparatory) and year. Filters combine, and you can also search by subject name or paper code.",
       },
       {
-        q: "My university is not listed. Can it be added?",
-        a: "Yes — contact us with the institution's name, type (university, college or institute), city and affiliation. Verified admins review and add new institutions.",
+        q: "Which program is covered?",
+        a: "The library covers SMVDU Katra, Computer Science & Engineering, in the AI & Robotics specialization. Papers are organized by semester so you can jump straight to your current term.",
       },
       {
-        q: "What is the difference between a university and a college here?",
-        a: "Universities (e.g. CSJMU, HBTU, AKTU) award degrees directly. Colleges and institutes (e.g. PSIT, AITH, UPTTI, NSI) are affiliated to a university — in our database each college links to its affiliating university.",
+        q: "Can other universities or branches be added?",
+        a: "BTech Buddy is purpose-built for the SMVDU CSE AI & Robotics program, so only those options are available. If you need papers outside this scope, please reach out via the Contact page.",
       },
     ],
   },
@@ -92,43 +92,43 @@ export function FAQ() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="text-center">
-        <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">
+        <p className="text-sm font-semibold uppercase tracking-wider text-accent">
           FAQ
         </p>
-        <h1 className="mt-2 font-display text-3xl font-bold text-navy-950 sm:text-4xl">
+        <h1 className="mt-2 font-display text-3xl font-bold text-fg sm:text-4xl">
           Frequently asked questions
         </h1>
       </div>
 
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="mx-auto mt-8 flex max-w-xl items-center gap-2 rounded-2xl border border-navy-200 bg-white p-2 shadow-soft focus-within:border-brand-400"
+        className="mx-auto mt-8 flex max-w-xl items-center gap-2 rounded-2xl border border-line bg-surface p-2 shadow-soft focus-within:border-accent"
         role="search"
       >
-        <Search className="ml-2 h-5 w-5 shrink-0 text-navy-400" />
+        <Search className="ml-2 h-5 w-5 shrink-0 text-fg-subtle" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search answers…"
-          className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-navy-400"
+          className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-fg-subtle"
           aria-label="Search FAQ"
         />
       </form>
 
       <div className="mt-10 space-y-10">
         {filtered.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-navy-200 bg-white p-10 text-center">
-            <p className="font-medium text-navy-700">
+          <div className="rounded-2xl border border-dashed border-line bg-surface p-10 text-center">
+            <p className="font-medium text-fg-muted">
               No answers match &ldquo;{query}&rdquo;
             </p>
-            <p className="mt-1 text-sm text-navy-500">
+            <p className="mt-1 text-sm text-fg-subtle">
               Try different keywords or contact us directly.
             </p>
           </div>
         )}
         {filtered.map((category) => (
           <section key={category.category}>
-            <h2 className="font-display text-lg font-semibold text-navy-950">
+            <h2 className="font-display text-lg font-semibold text-fg">
               {category.category}
             </h2>
             <div className="mt-3 space-y-2">
@@ -144,8 +144,8 @@ export function FAQ() {
                     transition={{ duration: 0.25, delay: i * 0.04 }}
                     className={`overflow-hidden rounded-xl border transition ${
                       isOpen
-                        ? "border-brand-300 bg-brand-50/50 shadow-soft"
-                        : "border-navy-100 bg-white hover:border-navy-200"
+                        ? "border-accent bg-accent-soft/50 shadow-soft"
+                        : "border-line bg-surface hover:border-line"
                     }`}
                   >
                     <button
@@ -155,11 +155,11 @@ export function FAQ() {
                       className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                       aria-expanded={isOpen}
                     >
-                      <span className="text-sm font-semibold text-navy-950">
+                      <span className="text-sm font-semibold text-fg">
                         {item.q}
                       </span>
                       <ChevronDown
-                        className={`h-5 w-5 shrink-0 text-navy-400 transition-transform ${
+                        className={`h-5 w-5 shrink-0 text-fg-subtle transition-transform ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />
@@ -173,7 +173,7 @@ export function FAQ() {
                       transition={{ duration: 0.25 }}
                       className="overflow-hidden"
                     >
-                      <p className="px-5 pb-4 text-sm leading-relaxed text-navy-600">
+                      <p className="px-5 pb-4 text-sm leading-relaxed text-fg-muted">
                         {item.a}
                       </p>
                     </motion.div>
@@ -185,16 +185,16 @@ export function FAQ() {
         ))}
       </div>
 
-      <div className="mt-12 rounded-3xl bg-gradient-to-br from-navy-900 to-brand-900 p-8 text-center text-white">
+      <div className="mt-12 rounded-3xl bg-gradient-to-br from-fg to-accent p-8 text-center text-accent-fg">
         <h2 className="font-display text-xl font-bold">
           Still have questions?
         </h2>
-        <p className="mt-1 text-sm text-navy-200">
+        <p className="mt-1 text-sm text-fg-muted">
           We usually reply within 48 hours.
         </p>
         <a
           href="/contact"
-          className="mt-5 inline-block rounded-xl bg-white px-6 py-3 text-sm font-bold text-navy-900 transition hover:bg-brand-50"
+          className="mt-5 inline-block rounded-xl bg-surface px-6 py-3 text-sm font-bold text-fg transition hover:bg-accent-soft"
         >
           Contact us
         </a>

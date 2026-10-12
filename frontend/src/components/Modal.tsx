@@ -32,7 +32,7 @@ export function Modal({ open, onClose, title, children, wide }: ModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[90] flex items-end justify-center bg-navy-950/60 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+          className="fixed inset-0 z-[90] flex items-end justify-center bg-scrim p-0 backdrop-blur-sm sm:items-center sm:p-6"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -44,17 +44,17 @@ export function Modal({ open, onClose, title, children, wide }: ModalProps) {
             exit={{ opacity: 0, y: 24, scale: 0.97 }}
             transition={{ type: "spring", damping: 26, stiffness: 320 }}
             onClick={(e) => e.stopPropagation()}
-            className={`max-h-[90vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-lift sm:rounded-2xl ${
+            className={`max-h-[90vh] w-full overflow-y-auto rounded-t-2xl bg-surface shadow-lift sm:rounded-2xl ${
               wide ? "sm:max-w-2xl" : "sm:max-w-md"
             }`}
           >
-            <div className="flex items-center justify-between border-b border-navy-100 px-6 py-4">
-              <h2 className="font-display text-lg font-semibold text-navy-950">
+            <div className="flex items-center justify-between border-b border-line px-6 py-4">
+              <h2 className="font-display text-lg font-semibold text-fg">
                 {title}
               </h2>
               <button
                 onClick={onClose}
-                className="rounded-lg p-1.5 text-navy-500 transition hover:bg-navy-50 hover:text-navy-900"
+                className="rounded-lg p-1.5 text-fg-subtle transition hover:bg-surface-2 hover:text-fg"
                 aria-label="Close dialog"
               >
                 <X className="h-5 w-5" />

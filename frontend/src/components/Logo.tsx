@@ -27,7 +27,7 @@ export function Logo({
       aria-label="BTech Buddy home"
     >
       <span
-        className={`relative flex ${sizes.icon} items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-500 to-navy-700 shadow-soft`}
+        className={`relative flex ${sizes.icon} items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-accent to-fg shadow-soft`}
       >
         {!imgFailed ? (
           <img
@@ -40,14 +40,14 @@ export function Logo({
           <>
             <GraduationCap className="h-1/2 w-1/2 text-white" strokeWidth={2.2} />
             <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-400 ring-2 ring-white">
-              <Shield className="h-2.5 w-2.5 text-navy-900" strokeWidth={3} />
+              <Shield className="h-2.5 w-2.5 text-fg" strokeWidth={3} />
             </span>
           </>
         )}
       </span>
       <span className={`font-display font-bold tracking-tight ${sizes.text}`}>
-        <span className={dark ? "text-white" : "text-navy-900"}>BTech</span>{" "}
-        <span className="text-brand-600">Buddy</span>
+        <span className={dark ? "text-footer-fg" : "text-fg"}>BTech</span>{" "}
+        <span className="text-accent">Buddy</span>
       </span>
     </Link>
   );

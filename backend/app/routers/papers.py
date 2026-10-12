@@ -7,6 +7,11 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Query, Request
 
 from app.config import settings
+from app.catalog import (
+    ALLOWED_BRANCH_CODE,
+    ALLOWED_SPECIALIZATIONS,
+    ALLOWED_UNIVERSITY_SHORT_NAME,
+)
 from app.database import (
     hash_ip,
     insert_row,
@@ -111,13 +116,30 @@ async def list_papers(
 @limiter.limit(settings.api_rate_limit)
 async def filter_options(request: Request):
     """Distinct filter values for the browse page."""
+    # Customer catalog: restrict to SMVDU + CSE + AI & Robotics only.
     institutions, _ = await select_rows(
         "institutions",
         select="id,name,short_name,type,city,verified",
+        params={"short_name": f"eq.{ALLOWED_UNIVERSITY_SHORT_NAME}"},
         order="name.asc",
     )
-    branches, _ = await select_rows("branches", select="id,name,code", order="name.asc")
-
+    branches, _ = await select_rows(
+        "branches",
+        select="id,name,code",
+        params={"code": f"eq.{ALLOWED_BRANCH_CODE}"},
+        order="name.asc",
+    )
+    try:
+        specializations, _ = await select_rows(
+            "specializations", select="id,name,code", order="name.asc"
+        )
+        specializations = [
+            s for s in specializations if s.get("name") in ALLOWED_SPECIALIZATIONS
+        ]
+    except Exception:
+        # Table may not exist yet (migration 0006 not applied) — degrade
+        # gracefully so the rest of the filters still work.
+        specializations = []
     years: List[int] = []
     rows, _ = await select_rows(
         "papers", select="exam_year", params={"status": "eq.published"}, count=True
@@ -127,6 +149,7 @@ async def filter_options(request: Request):
     return {
         "institutions": institutions,
         "branches": branches,
+        "specializations": specializations,
         "semesters": [1, 2, 3, 4, 5, 6, 7, 8],
         "exam_types": [
             {"value": "regular", "label": "Regular"},

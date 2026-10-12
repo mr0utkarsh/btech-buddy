@@ -17,13 +17,13 @@ function PolicyLayout({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
       >
-        <h1 className="font-display text-3xl font-bold text-navy-950 sm:text-4xl">
+        <h1 className="font-display text-3xl font-bold text-fg sm:text-4xl">
           {title}
         </h1>
-        <p className="mt-2 text-sm text-navy-500">
+        <p className="mt-2 text-sm text-fg-subtle">
           Last updated: {updated}
         </p>
-        <div className="mt-8 space-y-6 text-sm leading-relaxed text-navy-700">
+        <div className="mt-8 space-y-6 text-sm leading-relaxed text-fg-muted">
           {children}
         </div>
       </motion.div>
@@ -40,7 +40,7 @@ function Section({
 }) {
   return (
     <section>
-      <h2 className="font-display text-lg font-semibold text-navy-950">
+      <h2 className="font-display text-lg font-semibold text-fg">
         {title}
       </h2>
       <div className="mt-2 space-y-3">{children}</div>

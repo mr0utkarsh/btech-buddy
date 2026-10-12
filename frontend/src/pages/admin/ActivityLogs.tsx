@@ -30,27 +30,27 @@ const ACTION_META: Record<
   string,
   { icon: typeof Activity; color: string }
 > = {
-  "paper.upload": { icon: UploadCloud, color: "bg-brand-50 text-brand-700" },
-  "paper.update": { icon: Pencil, color: "bg-navy-50 text-navy-700" },
+  "paper.upload": { icon: UploadCloud, color: "bg-accent-soft text-accent" },
+  "paper.update": { icon: Pencil, color: "bg-surface-2 text-fg-muted" },
   "paper.publish": { icon: Send, color: "bg-emerald-50 text-emerald-700" },
   "paper.unpublish": { icon: Undo2, color: "bg-amber-50 text-amber-700" },
   "paper.delete": { icon: Trash2, color: "bg-rose-50 text-rose-700" },
-  "paper.replace": { icon: UploadCloud, color: "bg-brand-50 text-brand-700" },
-  "institution.create": { icon: Building2, color: "bg-brand-50 text-brand-700" },
-  "institution.update": { icon: Building2, color: "bg-navy-50 text-navy-700" },
+  "paper.replace": { icon: UploadCloud, color: "bg-accent-soft text-accent" },
+  "institution.create": { icon: Building2, color: "bg-accent-soft text-accent" },
+  "institution.update": { icon: Building2, color: "bg-surface-2 text-fg-muted" },
   "institution.delete": { icon: Building2, color: "bg-rose-50 text-rose-700" },
-  "branch.create": { icon: GraduationCap, color: "bg-brand-50 text-brand-700" },
-  "branch.update": { icon: GraduationCap, color: "bg-navy-50 text-navy-700" },
+  "branch.create": { icon: GraduationCap, color: "bg-accent-soft text-accent" },
+  "branch.update": { icon: GraduationCap, color: "bg-surface-2 text-fg-muted" },
   "branch.delete": { icon: GraduationCap, color: "bg-rose-50 text-rose-700" },
-  "subject.create": { icon: BookOpen, color: "bg-brand-50 text-brand-700" },
-  "subject.update": { icon: BookOpen, color: "bg-navy-50 text-navy-700" },
+  "subject.create": { icon: BookOpen, color: "bg-accent-soft text-accent" },
+  "subject.update": { icon: BookOpen, color: "bg-surface-2 text-fg-muted" },
   "subject.delete": { icon: BookOpen, color: "bg-rose-50 text-rose-700" },
-  "admin.invite": { icon: UserPlus, color: "bg-brand-50 text-brand-700" },
+  "admin.invite": { icon: UserPlus, color: "bg-accent-soft text-accent" },
   "admin.revoke": { icon: Ban, color: "bg-amber-50 text-amber-700" },
   "admin.restore": { icon: CheckCircle, color: "bg-emerald-50 text-emerald-700" },
   "admin.delete": { icon: Trash2, color: "bg-rose-50 text-rose-700" },
   "admin.role.change": { icon: Crown, color: "bg-amber-50 text-amber-700" },
-  "setup.initial_super_admin": { icon: KeyRound, color: "bg-brand-50 text-brand-700" },
+  "setup.initial_super_admin": { icon: KeyRound, color: "bg-accent-soft text-accent" },
 };
 
 const ACTION_FILTERS = [
@@ -106,10 +106,10 @@ export function ActivityLogs() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-fg sm:text-3xl">
             Activity logs
           </h1>
-          <p className="mt-1 text-sm text-navy-600">
+          <p className="mt-1 text-sm text-fg-muted">
             {total} recorded admin actions (audit trail)
           </p>
         </div>
@@ -123,20 +123,20 @@ export function ActivityLogs() {
             setPage(1);
             load();
           }}
-          className="flex flex-1 items-center gap-2 rounded-xl border border-navy-200 bg-white p-1.5 shadow-soft focus-within:border-brand-400"
+          className="flex flex-1 items-center gap-2 rounded-xl border border-line bg-surface p-1.5 shadow-soft focus-within:border-accent"
           role="search"
         >
-          <Search className="ml-2 h-4 w-4 shrink-0 text-navy-400" />
+          <Search className="ml-2 h-4 w-4 shrink-0 text-fg-subtle" />
           <input
             key={actor}
             defaultValue={actor}
             placeholder="Filter by admin email…"
-            className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-navy-400"
+            className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-fg-subtle"
             aria-label="Filter by actor"
           />
           <button
             type="submit"
-            className="shrink-0 rounded-lg bg-navy-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-navy-800"
+            className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-fg transition hover:bg-accent-hover"
           >
             Filter
           </button>
@@ -151,8 +151,8 @@ export function ActivityLogs() {
               }}
               className={`rounded-full px-3.5 py-2 text-xs font-semibold transition ${
                 actionFilter === f.value
-                  ? "bg-navy-900 text-white"
-                  : "border border-navy-200 bg-white text-navy-700 hover:bg-navy-50"
+                  ? "bg-accent text-accent-fg"
+                  : "border border-line bg-surface text-fg-muted hover:bg-surface-2"
               }`}
             >
               {f.label}
@@ -165,38 +165,38 @@ export function ActivityLogs() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mt-5 overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-soft"
+        className="mt-5 overflow-hidden rounded-2xl border border-line bg-surface shadow-soft"
       >
         {loading ? (
           <div className="space-y-2 p-5">
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="h-14 animate-pulse rounded-xl bg-navy-50"
+                className="h-14 animate-pulse rounded-xl bg-surface-2"
               />
             ))}
           </div>
         ) : logs.length === 0 ? (
           <div className="p-12 text-center">
-            <ScrollText className="mx-auto h-12 w-12 text-navy-200" />
-            <h3 className="mt-4 font-display text-lg font-semibold text-navy-900">
+            <ScrollText className="mx-auto h-12 w-12 text-fg-muted" />
+            <h3 className="mt-4 font-display text-lg font-semibold text-fg">
               No activity yet
             </h3>
-            <p className="mt-1 text-sm text-navy-500">
+            <p className="mt-1 text-sm text-fg-subtle">
               Admin actions will appear here.
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-navy-50">
+          <ul className="divide-y divide-line">
             {logs.map((log) => {
               const meta = ACTION_META[log.action] || {
                 icon: Activity,
-                color: "bg-navy-50 text-navy-700",
+                color: "bg-surface-2 text-fg-muted",
               };
               return (
                 <li
                   key={log.id}
-                  className="flex items-start gap-4 px-5 py-4 transition hover:bg-navy-50/60"
+                  className="flex items-start gap-4 px-5 py-4 transition hover:bg-surface-2/60"
                 >
                   <span
                     className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${meta.color}`}
@@ -204,28 +204,28 @@ export function ActivityLogs() {
                     <meta.icon className="h-4 w-4" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-navy-900">
+                    <p className="text-sm text-fg">
                       <span className="font-semibold">
                         {log.actor_email || "System"}
                       </span>{" "}
-                      <span className="text-navy-500">
+                      <span className="text-fg-subtle">
                         {describeAction(log.action)}
                       </span>{" "}
                       {describeEntity(log)}
                     </p>
                     {log.details &&
                       Object.keys(log.details).length > 0 && (
-                        <p className="mt-0.5 truncate text-xs text-navy-500">
+                        <p className="mt-0.5 truncate text-xs text-fg-subtle">
                           {JSON.stringify(log.details)}
                         </p>
                       )}
-                    <p className="mt-0.5 text-xs text-navy-400">
+                    <p className="mt-0.5 text-xs text-fg-subtle">
                       {timeAgo(log.created_at)} ·{" "}
                       {formatDate(log.created_at)}
                       {log.ip_hash ? ` · IP ${log.ip_hash}` : ""}
                     </p>
                   </div>
-                  <span className="hidden shrink-0 rounded-full bg-navy-50 px-2.5 py-1 font-mono text-[10px] font-semibold text-navy-600 sm:block">
+                  <span className="hidden shrink-0 rounded-full bg-surface-2 px-2.5 py-1 font-mono text-[10px] font-semibold text-fg-muted sm:block">
                     {log.action}
                   </span>
                 </li>
@@ -240,17 +240,17 @@ export function ActivityLogs() {
           <button
             disabled={page <= 1}
             onClick={() => setPage((p) => p - 1)}
-            className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm font-medium text-navy-700 transition hover:bg-navy-50 disabled:opacity-40"
+            className="rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-surface-2 disabled:opacity-40"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
-          <span className="text-sm text-navy-600">
+          <span className="text-sm text-fg-muted">
             Page {page} of {totalPages}
           </span>
           <button
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
-            className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm font-medium text-navy-700 transition hover:bg-navy-50 disabled:opacity-40"
+            className="rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-surface-2 disabled:opacity-40"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -289,17 +289,17 @@ function describeAction(action: string): string {
 
 function describeEntity(log: ActivityLog): React.ReactNode {
   const d = (log.details || {}) as Record<string, unknown>;
-  if (d.subject) return <span className="font-medium text-navy-800">“{String(d.subject)}”</span>;
-  if (d.name) return <span className="font-medium text-navy-800">“{String(d.name)}”</span>;
+  if (d.subject) return <span className="font-medium text-fg">“{String(d.subject)}”</span>;
+  if (d.name) return <span className="font-medium text-fg">“{String(d.name)}”</span>;
   if (d.invited_email)
     return (
-      <span className="font-medium text-navy-800">
+      <span className="font-medium text-fg">
         “{String(d.invited_email)}”
       </span>
     );
   if (d.email)
     return (
-      <span className="font-medium text-navy-800">
+      <span className="font-medium text-fg">
         “{String(d.email)}”
       </span>
     );

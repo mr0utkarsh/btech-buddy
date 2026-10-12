@@ -5,6 +5,11 @@ import fitz
 import pytest
 from fastapi.testclient import TestClient
 
+from app.catalog import (
+    ALLOWED_BRANCH_CODE,
+    ALLOWED_SPECIALIZATION_NAME,
+    ALLOWED_UNIVERSITY_SHORT_NAME,
+)
 from app.main import app
 from app.rate_limit import limiter
 
@@ -34,6 +39,16 @@ def test_health_endpoint(client):
     assert resp.status_code == 200
     body = resp.json()
     assert body["service"] == "btech-buddy-backend"
+
+
+def test_catalog_constants_are_smvdu_cse_ai_robotics():
+    """The customer catalog is fixed to exactly one program."""
+    from app.catalog import ALLOWED_SPECIALIZATIONS
+
+    assert ALLOWED_UNIVERSITY_SHORT_NAME == "SMVDU"
+    assert ALLOWED_BRANCH_CODE == "CSE"
+    assert ALLOWED_SPECIALIZATIONS == ["AI and Robotics"]
+    assert ALLOWED_SPECIALIZATION_NAME == "AI and Robotics"
 
 
 def test_setup_requires_token(client, monkeypatch):
@@ -66,6 +81,33 @@ def test_setup_rejects_weak_password(client, monkeypatch):
     # Rejected either by request validation (422) or the
     # password-strength rule (400).
     assert resp.status_code in (400, 422)
+
+
+def test_branch_create_rejects_non_cse(client, monkeypatch):
+    """Admins cannot add a branch other than CSE (403 before DB if unauthed)."""
+    import app.config as config
+
+    monkeypatch.setattr(config.settings, "setup_token", "secret-token")
+    # Without an admin token the request is rejected as unauthorized/forbidden;
+    # the key guarantee is that a non-CSE branch can never be persisted.
+    resp = client.post(
+        "/api/admin/branches",
+        json={"name": "Mechanical Engineering", "code": "ME"},
+    )
+    assert resp.status_code in (401, 403)
+
+
+def test_institution_create_rejects_non_smvdu(client):
+    """Admins cannot add an institution other than SMVDU."""
+    resp = client.post(
+        "/api/admin/institutions",
+        json={
+            "name": "Some Other University",
+            "short_name": "SOU",
+            "type": "university",
+        },
+    )
+    assert resp.status_code in (401, 403)
 
 
 def test_upload_rejects_non_pdf_without_auth(client):

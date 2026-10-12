@@ -43,6 +43,7 @@ export function Browse() {
   const q = params.get("q") || "";
   const institution = params.get("institution") || "";
   const branch = params.get("branch") || "";
+  const specialization = params.get("specialization") || "";
   const semester = params.get("semester") || "";
   const examType = params.get("exam") || "";
   const year = params.get("year") || "";
@@ -135,7 +136,7 @@ export function Browse() {
       <div>
         <label
           htmlFor="f-institution"
-          className="text-xs font-semibold uppercase tracking-wider text-navy-500"
+          className="text-xs font-semibold uppercase tracking-wider text-fg-subtle"
         >
           University / Institution
         </label>
@@ -143,7 +144,7 @@ export function Browse() {
           id="f-institution"
           value={institution}
           onChange={(e) => setParam("institution", e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-navy-200 bg-white px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
         >
           <option value="">All institutions</option>
           {(filters?.institutions || []).map((inst) => (
@@ -158,7 +159,7 @@ export function Browse() {
       <div>
         <label
           htmlFor="f-branch"
-          className="text-xs font-semibold uppercase tracking-wider text-navy-500"
+          className="text-xs font-semibold uppercase tracking-wider text-fg-subtle"
         >
           Branch
         </label>
@@ -166,7 +167,7 @@ export function Browse() {
           id="f-branch"
           value={branch}
           onChange={(e) => setParam("branch", e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-navy-200 bg-white px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
         >
           <option value="">All branches</option>
           {(filters?.branches || []).map((br) => (
@@ -179,8 +180,30 @@ export function Browse() {
 
       <div>
         <label
+          htmlFor="f-specialization"
+          className="text-xs font-semibold uppercase tracking-wider text-fg-subtle"
+        >
+          Specialization
+        </label>
+        <select
+          id="f-specialization"
+          value={specialization}
+          onChange={(e) => setParam("specialization", e.target.value)}
+          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
+        >
+          <option value="">All specializations</option>
+          {(filters?.specializations || []).map((sp) => (
+            <option key={sp.id} value={sp.id}>
+              {sp.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label
           htmlFor="f-semester"
-          className="text-xs font-semibold uppercase tracking-wider text-navy-500"
+          className="text-xs font-semibold uppercase tracking-wider text-fg-subtle"
         >
           Semester
         </label>
@@ -188,7 +211,7 @@ export function Browse() {
           id="f-semester"
           value={semester}
           onChange={(e) => setParam("semester", e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-navy-200 bg-white px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
         >
           <option value="">All semesters</option>
           {(filters?.semesters || []).map((s) => (
@@ -202,7 +225,7 @@ export function Browse() {
       <div>
         <label
           htmlFor="f-exam"
-          className="text-xs font-semibold uppercase tracking-wider text-navy-500"
+          className="text-xs font-semibold uppercase tracking-wider text-fg-subtle"
         >
           Exam type
         </label>
@@ -210,7 +233,7 @@ export function Browse() {
           id="f-exam"
           value={examType}
           onChange={(e) => setParam("exam", e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-navy-200 bg-white px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
         >
           <option value="">All exam types</option>
           {(filters?.exam_types || []).map((t) => (
@@ -224,7 +247,7 @@ export function Browse() {
       <div>
         <label
           htmlFor="f-year"
-          className="text-xs font-semibold uppercase tracking-wider text-navy-500"
+          className="text-xs font-semibold uppercase tracking-wider text-fg-subtle"
         >
           Year
         </label>
@@ -232,7 +255,7 @@ export function Browse() {
           id="f-year"
           value={year}
           onChange={(e) => setParam("year", e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-navy-200 bg-white px-3 py-2.5 text-sm focus:border-brand-400 focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
         >
           <option value="">All years</option>
           {(filters?.years || []).map((y) => (
@@ -245,7 +268,7 @@ export function Browse() {
 
       <button
         onClick={reset}
-        className="flex w-full items-center justify-center gap-2 rounded-lg border border-navy-200 px-3 py-2.5 text-sm font-medium text-navy-700 transition hover:bg-navy-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg border border-line px-3 py-2.5 text-sm font-medium text-fg-muted transition hover:bg-surface-2"
       >
         <RotateCcw className="h-4 w-4" />
         Reset filters
@@ -258,13 +281,13 @@ export function Browse() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="font-display text-3xl font-bold text-navy-950 sm:text-4xl">
+        <h1 className="font-display text-3xl font-bold text-fg sm:text-4xl">
           Browse Papers
         </h1>
-        <p className="mt-1 text-navy-600">
+        <p className="mt-1 text-fg-muted">
           {result ? (
             <>
-              <span className="font-semibold text-navy-900">
+              <span className="font-semibold text-fg">
                 {result.total}
               </span>{" "}
               published paper{result.total === 1 ? "" : "s"} available
@@ -285,34 +308,34 @@ export function Browse() {
             ) as HTMLInputElement;
             setParam("q", input.value.trim());
           }}
-          className="flex flex-1 items-center gap-2 rounded-xl border border-navy-200 bg-white p-1.5 shadow-soft focus-within:border-brand-400"
+          className="flex flex-1 items-center gap-2 rounded-xl border border-line bg-surface p-1.5 shadow-soft focus-within:border-accent"
           role="search"
         >
-          <Search className="ml-2 h-5 w-5 shrink-0 text-navy-400" />
+          <Search className="ml-2 h-5 w-5 shrink-0 text-fg-subtle" />
           <input
             name="q"
             key={q}
             defaultValue={q}
             placeholder="Search subject, paper code, university…"
-            className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-navy-400"
+            className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-fg-subtle"
             aria-label="Search papers"
           />
           <button
             type="submit"
-            className="shrink-0 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+            className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-fg transition hover:bg-accent-hover"
           >
             Search
           </button>
         </form>
         <button
-          className="flex items-center gap-2 rounded-xl border border-navy-200 bg-white px-4 py-2.5 text-sm font-semibold text-navy-800 shadow-soft lg:hidden"
+          className="flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-fg shadow-soft lg:hidden"
           onClick={() => setMobileFiltersOpen(true)}
           aria-label="Open filters"
         >
           <SlidersHorizontal className="h-4 w-4" />
           Filters
           {activeFilterCount > 0 && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-fg">
               {activeFilterCount}
             </span>
           )}
@@ -321,7 +344,7 @@ export function Browse() {
 
       {/* Quick exam-type chips (Mid-Sem / End-Sem) */}
       <div className="mb-6 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-navy-500">
+        <span className="text-xs font-semibold uppercase tracking-wider text-fg-subtle">
           Exam:
         </span>
         {[
@@ -335,8 +358,8 @@ export function Browse() {
               onClick={() => setParam("exam", active ? "" : chip.value)}
               className={`rounded-full border px-4 py-1.5 text-sm font-semibold transition ${
                 active
-                  ? "border-brand-600 bg-brand-600 text-white shadow-soft"
-                  : "border-navy-200 bg-white text-navy-700 hover:border-brand-300 hover:text-brand-700"
+                  ? "border-accent bg-accent text-accent-fg shadow-soft"
+                  : "border-line bg-surface text-fg-muted hover:border-accent hover:text-accent"
               }`}
               aria-pressed={active}
             >
@@ -347,7 +370,7 @@ export function Browse() {
         {examType && (
           <button
             onClick={() => setParam("exam", "")}
-            className="flex items-center gap-1 rounded-full border border-navy-200 bg-white px-3 py-1.5 text-sm font-medium text-navy-500 transition hover:bg-navy-50"
+            className="flex items-center gap-1 rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-medium text-fg-subtle transition hover:bg-surface-2"
           >
             <X className="h-3.5 w-3.5" /> Clear
           </button>
@@ -357,9 +380,9 @@ export function Browse() {
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         {/* Sidebar (desktop) */}
         <aside className="hidden lg:block">
-          <div className="sticky top-24 rounded-2xl border border-navy-100 bg-white p-5 shadow-soft">
-            <h2 className="mb-4 flex items-center gap-2 font-display text-base font-semibold text-navy-950">
-              <SlidersHorizontal className="h-4 w-4 text-brand-600" />
+          <div className="sticky top-24 rounded-2xl border border-line bg-surface p-5 shadow-soft">
+            <h2 className="mb-4 flex items-center gap-2 font-display text-base font-semibold text-fg">
+              <SlidersHorizontal className="h-4 w-4 text-accent" />
               Filters
             </h2>
             {filterPanel}
@@ -371,7 +394,7 @@ export function Browse() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[80] bg-navy-950/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-[80] bg-scrim backdrop-blur-sm lg:hidden"
             onClick={() => setMobileFiltersOpen(false)}
           >
             <motion.div
@@ -379,7 +402,7 @@ export function Browse() {
               animate={{ x: 0 }}
               transition={{ type: "spring", damping: 28, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="h-full w-80 max-w-[85vw] overflow-y-auto bg-white p-6 shadow-lift"
+              className="h-full w-80 max-w-[85vw] overflow-y-auto bg-surface p-6 shadow-lift"
               role="dialog"
               aria-label="Filters"
             >
@@ -389,7 +412,7 @@ export function Browse() {
                 </h2>
                 <button
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="rounded-lg p-1.5 hover:bg-navy-50"
+                  className="rounded-lg p-1.5 hover:bg-surface-2"
                   aria-label="Close filters"
                 >
                   <X className="h-5 w-5" />
@@ -406,7 +429,7 @@ export function Browse() {
           <div className="mb-4 flex items-center justify-between">
             <div className="flex flex-wrap gap-1.5">
               {q && (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-accent">
                   &ldquo;{q}&rdquo;
                   <button
                     onClick={() => setParam("q", "")}
@@ -433,7 +456,7 @@ export function Browse() {
                   .map((label, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-navy-50 px-3 py-1 text-xs font-semibold text-navy-700"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold text-fg-muted"
                     >
                       {label}
                     </span>
@@ -442,7 +465,7 @@ export function Browse() {
             <select
               value={sort}
               onChange={(e) => setParam("sort", e.target.value)}
-              className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm focus:border-brand-400 focus:outline-none"
+              className="rounded-lg border border-line bg-surface px-3 py-2 text-sm focus:border-accent focus:outline-none"
               aria-label="Sort results"
             >
               {SORTS.map((s) => (
@@ -456,17 +479,17 @@ export function Browse() {
           {loading ? (
             <GridSkeleton count={8} />
           ) : !result || (result.data || []).length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-navy-200 bg-white p-14 text-center">
-              <FileSearch className="mx-auto h-12 w-12 text-navy-300" />
-              <h3 className="mt-4 font-display text-lg font-semibold text-navy-900">
+            <div className="rounded-2xl border border-dashed border-line bg-surface p-14 text-center">
+              <FileSearch className="mx-auto h-12 w-12 text-fg-muted" />
+              <h3 className="mt-4 font-display text-lg font-semibold text-fg">
                 No papers found
               </h3>
-              <p className="mx-auto mt-2 max-w-sm text-sm text-navy-500">
+              <p className="mx-auto mt-2 max-w-sm text-sm text-fg-subtle">
                 Try removing some filters or broadening your search.
               </p>
               <button
                 onClick={reset}
-                className="mt-5 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+                className="mt-5 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-accent-fg transition hover:bg-accent-hover"
               >
                 Clear all filters
               </button>
@@ -488,7 +511,7 @@ export function Browse() {
                   <button
                     disabled={page <= 1}
                     onClick={() => setParam("page", String(page - 1))}
-                    className="flex items-center gap-1 rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm font-medium text-navy-700 transition hover:bg-navy-50 disabled:opacity-40"
+                    className="flex items-center gap-1 rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-surface-2 disabled:opacity-40"
                     aria-label="Previous page"
                   >
                     <ChevronLeft className="h-4 w-4" />
@@ -502,8 +525,8 @@ export function Browse() {
                         onClick={() => setParam("page", String(p))}
                         className={`h-10 min-w-10 rounded-lg px-3 text-sm font-semibold transition ${
                           p === page
-                            ? "bg-navy-900 text-white"
-                            : "border border-navy-200 bg-white text-navy-700 hover:bg-navy-50"
+                            ? "bg-accent text-accent-fg"
+                            : "border border-line bg-surface text-fg-muted hover:bg-surface-2"
                         }`}
                         aria-current={p === page ? "page" : undefined}
                       >
@@ -513,7 +536,7 @@ export function Browse() {
                   <button
                     disabled={page >= totalPages}
                     onClick={() => setParam("page", String(page + 1))}
-                    className="flex items-center gap-1 rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm font-medium text-navy-700 transition hover:bg-navy-50 disabled:opacity-40"
+                    className="flex items-center gap-1 rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-surface-2 disabled:opacity-40"
                     aria-label="Next page"
                   >
                     Next

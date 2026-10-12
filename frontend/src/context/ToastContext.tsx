@@ -96,7 +96,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                   : toast.type === "error"
                     ? "border-rose-200 bg-rose-50 text-rose-900"
-                    : "border-navy-200 bg-navy-50 text-navy-900"
+                    : "border-line bg-surface-2 text-fg"
               }`}
               role="alert"
             >
@@ -105,7 +105,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               ) : toast.type === "error" ? (
                 <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
               ) : (
-                <Info className="mt-0.5 h-5 w-5 shrink-0 text-navy-600" />
+                <Info className="mt-0.5 h-5 w-5 shrink-0 text-fg-muted" />
               )}
               <p className="flex-1 text-sm font-medium">{toast.message}</p>
               <button

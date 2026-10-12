@@ -57,19 +57,19 @@ export function Contact() {
     `mt-1.5 w-full rounded-xl border px-4 py-3 text-sm transition focus:outline-none ${
       hasError
         ? "border-rose-300 bg-rose-50 focus:border-rose-400"
-        : "border-navy-200 bg-white focus:border-brand-400"
+        : "border-line bg-surface focus:border-accent"
     }`;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">
+        <p className="text-sm font-semibold uppercase tracking-wider text-accent">
           Contact us
         </p>
-        <h1 className="mt-2 font-display text-3xl font-bold text-navy-950 sm:text-4xl">
+        <h1 className="mt-2 font-display text-3xl font-bold text-fg sm:text-4xl">
           We would love to hear from you
         </h1>
-        <p className="mt-3 text-navy-600">
+        <p className="mt-3 text-fg-muted">
           Missing a paper? Found a broken link? Want your
           institution added? Send us a message.
         </p>
@@ -82,14 +82,14 @@ export function Contact() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="rounded-3xl border border-navy-100 bg-white p-6 shadow-lift sm:p-8"
+          className="rounded-3xl border border-line bg-surface p-6 shadow-lift sm:p-8"
           noValidate
         >
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label
                 htmlFor="c-name"
-                className="text-sm font-semibold text-navy-900"
+                className="text-sm font-semibold text-fg"
               >
                 Full name
               </label>
@@ -113,7 +113,7 @@ export function Contact() {
             <div>
               <label
                 htmlFor="c-email"
-                className="text-sm font-semibold text-navy-900"
+                className="text-sm font-semibold text-fg"
               >
                 Email address
               </label>
@@ -139,9 +139,9 @@ export function Contact() {
           <div className="mt-5">
             <label
               htmlFor="c-subject"
-              className="text-sm font-semibold text-navy-900"
+              className="text-sm font-semibold text-fg"
             >
-              Subject <span className="font-normal text-navy-400">(optional)</span>
+              Subject <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               id="c-subject"
@@ -158,7 +158,7 @@ export function Contact() {
           <div className="mt-5">
             <label
               htmlFor="c-message"
-              className="text-sm font-semibold text-navy-900"
+              className="text-sm font-semibold text-fg"
             >
               Message
             </label>
@@ -178,7 +178,7 @@ export function Contact() {
                 {errors.message}
               </p>
             )}
-            <p className="mt-1 text-right text-xs text-navy-400">
+            <p className="mt-1 text-right text-xs text-fg-subtle">
               {form.message.length}/5000
             </p>
           </div>
@@ -186,12 +186,12 @@ export function Contact() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-60"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover disabled:opacity-60"
           >
             <Send className="h-4 w-4" />
             {submitting ? "Sending…" : "Send message"}
           </button>
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-navy-500">
+          <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-fg-subtle">
             <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
             Responses are handled by verified admins only.
           </p>
@@ -209,8 +209,8 @@ export function Contact() {
               icon: MapPin,
               title: "Coverage",
               lines: [
-                "Kanpur, Uttar Pradesh",
-                "CSJMU · HBTU · AKTU colleges · Rama · CSA · IIT Kanpur",
+                "Shri Mata Vaishno Devi University, Katra",
+                "CSE · AI & Robotics specialization",
               ],
             },
             {
@@ -235,20 +235,20 @@ export function Contact() {
               initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.35, delay: i * 0.08 }}
-              className="flex gap-4 rounded-2xl border border-navy-100 bg-white p-5 shadow-soft"
+              className="flex gap-4 rounded-2xl border border-line bg-surface p-5 shadow-soft"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
                 <card.icon className="h-5 w-5" />
               </span>
               <div>
-                <h3 className="font-display text-sm font-semibold text-navy-950">
+                <h3 className="font-display text-sm font-semibold text-fg">
                   {card.title}
                 </h3>
                 {card.lines.map((line, j) => (
                   <p
                     key={j}
                     className={`mt-0.5 text-sm ${
-                      j === 0 ? "font-medium text-navy-800" : "text-navy-500"
+                      j === 0 ? "font-medium text-fg" : "text-fg-subtle"
                     }`}
                   >
                     {line}

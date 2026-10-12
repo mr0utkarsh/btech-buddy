@@ -31,7 +31,7 @@ function AuthLogoMark() {
       />
     );
   }
-  return <ShieldCheck className="h-6 w-6 text-white" />;
+  return <ShieldCheck className="h-6 w-6 text-accent-fg" />;
 }
 
 export function Login() {
@@ -87,7 +87,7 @@ export function Login() {
   };
 
   return (
-    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-navy-950 px-4 py-12">
+    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-hero px-4 py-12">
       <div
         aria-hidden
         className="absolute inset-0 opacity-40"
@@ -100,23 +100,23 @@ export function Login() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white/95 p-8 shadow-lift backdrop-blur"
+        className="relative w-full max-w-md rounded-3xl border border-hero-line bg-surface p-8 shadow-lift backdrop-blur"
       >
         <Link
           to="/"
-          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-navy-600 transition hover:text-brand-700"
+          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted transition hover:text-accent"
         >
           <ArrowLeft className="h-4 w-4" /> Back to site
         </Link>
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-navy-700 shadow-soft">
+          <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-accent-soft0 to-fg shadow-soft">
             <AuthLogoMark />
           </span>
           <div>
-            <h1 className="font-display text-2xl font-bold text-navy-950">
+            <h1 className="font-display text-2xl font-bold text-fg">
               Admin sign in
             </h1>
-            <p className="text-sm text-navy-500">
+            <p className="text-sm text-fg-subtle">
               BTech Buddy dashboard
             </p>
           </div>
@@ -136,12 +136,12 @@ export function Login() {
           <div>
             <label
               htmlFor="li-email"
-              className="text-sm font-semibold text-navy-900"
+              className="text-sm font-semibold text-fg"
             >
               Email
             </label>
             <div className="relative mt-1.5">
-              <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-navy-400" />
+              <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-fg-subtle" />
               <input
                 id="li-email"
                 type="email"
@@ -150,19 +150,19 @@ export function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@example.com"
-                className="w-full rounded-xl border border-navy-200 bg-white py-3 pl-10 pr-4 text-sm transition focus:border-brand-400 focus:outline-none"
+                className="w-full rounded-xl border border-line bg-surface py-3 pl-10 pr-4 text-sm transition focus:border-accent focus:outline-none"
               />
             </div>
           </div>
           <div>
             <label
               htmlFor="li-password"
-              className="text-sm font-semibold text-navy-900"
+              className="text-sm font-semibold text-fg"
             >
               Password
             </label>
             <div className="relative mt-1.5">
-              <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-navy-400" />
+              <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-fg-subtle" />
               <input
                 id="li-password"
                 type="password"
@@ -171,14 +171,14 @@ export function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-navy-200 bg-white py-3 pl-10 pr-4 text-sm transition focus:border-brand-400 focus:outline-none"
+                className="w-full rounded-xl border border-line bg-surface py-3 pl-10 pr-4 text-sm transition focus:border-accent focus:outline-none"
               />
             </div>
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover disabled:opacity-60"
           >
             <LogIn className="h-4 w-4" />
             {loading ? "Signing in…" : "Sign in"}
@@ -186,17 +186,17 @@ export function Login() {
         </form>
 
         {setupEnabled && (
-          <div className="mt-5 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm">
-            <p className="font-medium text-brand-900">
+          <div className="mt-5 rounded-xl border border-accent-soft bg-accent-soft px-4 py-3 text-sm">
+            <p className="font-medium text-accent">
               First time here?
             </p>
-            <p className="mt-0.5 text-brand-700">
+            <p className="mt-0.5 text-accent">
               No super admin exists yet. Complete the one-time
               setup to create the first account.
             </p>
             <Link
               to="/setup"
-              className="mt-2 inline-flex items-center gap-1.5 font-semibold text-brand-800 underline-offset-2 hover:underline"
+              className="mt-2 inline-flex items-center gap-1.5 font-semibold text-accent underline-offset-2 hover:underline"
             >
               <KeyRound className="h-4 w-4" />
               Run initial setup
@@ -204,7 +204,7 @@ export function Login() {
           </div>
         )}
 
-        <p className="mt-6 text-center text-xs text-navy-400">
+        <p className="mt-6 text-center text-xs text-fg-subtle">
           Protected by Supabase Auth · server-side authorization ·
           audit logged
         </p>
@@ -285,19 +285,19 @@ export function SetupAdmin() {
 
   if (status?.super_admin_exists) {
     return (
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-navy-950 px-4 py-12">
-        <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/95 p-8 text-center shadow-lift">
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-hero px-4 py-12">
+        <div className="w-full max-w-md rounded-3xl border border-hero-line bg-surface p-8 text-center shadow-lift">
           <ShieldCheck className="mx-auto h-12 w-12 text-emerald-600" />
-          <h1 className="mt-4 font-display text-xl font-bold text-navy-950">
+          <h1 className="mt-4 font-display text-xl font-bold text-fg">
             Setup already completed
           </h1>
-          <p className="mt-2 text-sm text-navy-600">
+          <p className="mt-2 text-sm text-fg-muted">
             A super admin account already exists. Use the sign-in
             page instead.
           </p>
           <Link
             to="/login"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-accent-fg transition hover:bg-accent-hover"
           >
             Go to sign in
           </Link>
@@ -308,18 +308,18 @@ export function SetupAdmin() {
 
   if (status && !status.setup_enabled) {
     return (
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-navy-950 px-4 py-12">
-        <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/95 p-8 text-center shadow-lift">
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-hero px-4 py-12">
+        <div className="w-full max-w-md rounded-3xl border border-hero-line bg-surface p-8 text-center shadow-lift">
           <AlertCircle className="mx-auto h-12 w-12 text-amber-500" />
-          <h1 className="mt-4 font-display text-xl font-bold text-navy-950">
+          <h1 className="mt-4 font-display text-xl font-bold text-fg">
             Setup disabled
           </h1>
-          <p className="mt-2 text-sm text-navy-600">
+          <p className="mt-2 text-sm text-fg-muted">
             The one-time setup flow is not enabled on this server.
-            Set <code className="rounded bg-navy-50 px-1.5 py-0.5 text-xs">SETUP_TOKEN</code> in
+            Set <code className="rounded bg-surface-2 px-1.5 py-0.5 text-xs">SETUP_TOKEN</code> in
             the backend environment, or configure the initial
-            super admin via <code className="rounded bg-navy-50 px-1.5 py-0.5 text-xs">INITIAL_SUPER_ADMIN_EMAIL</code>{" "}
-            and <code className="rounded bg-navy-50 px-1.5 py-0.5 text-xs">INITIAL_SUPER_ADMIN_PASSWORD</code>.
+            super admin via <code className="rounded bg-surface-2 px-1.5 py-0.5 text-xs">INITIAL_SUPER_ADMIN_EMAIL</code>{" "}
+            and <code className="rounded bg-surface-2 px-1.5 py-0.5 text-xs">INITIAL_SUPER_ADMIN_PASSWORD</code>.
           </p>
         </div>
       </div>
@@ -327,22 +327,22 @@ export function SetupAdmin() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-navy-950 px-4 py-12">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-hero px-4 py-12">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45 }}
-        className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white/95 p-8 shadow-lift backdrop-blur"
+        className="relative w-full max-w-md rounded-3xl border border-hero-line bg-surface p-8 shadow-lift backdrop-blur"
       >
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-navy-700 shadow-soft">
-            <KeyRound className="h-6 w-6 text-white" />
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-accent-soft0 to-fg shadow-soft">
+            <KeyRound className="h-6 w-6 text-accent-fg" />
           </span>
           <div>
-            <h1 className="font-display text-2xl font-bold text-navy-950">
+            <h1 className="font-display text-2xl font-bold text-fg">
               One-time setup
             </h1>
-            <p className="text-sm text-navy-500">
+            <p className="text-sm text-fg-subtle">
               Create the super admin account
             </p>
           </div>
@@ -367,7 +367,7 @@ export function SetupAdmin() {
 
         <form onSubmit={submit} className="mt-5 space-y-4">
           <div>
-            <label htmlFor="su-token" className="text-sm font-semibold text-navy-900">
+            <label htmlFor="su-token" className="text-sm font-semibold text-fg">
               Setup token
             </label>
             <input
@@ -376,12 +376,12 @@ export function SetupAdmin() {
               required
               value={setupToken}
               onChange={(e) => setSetupToken(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-navy-200 bg-white px-4 py-3 text-sm transition focus:border-brand-400 focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm transition focus:border-accent focus:outline-none"
               placeholder="Server-provided token"
             />
           </div>
           <div>
-            <label htmlFor="su-email" className="text-sm font-semibold text-navy-900">
+            <label htmlFor="su-email" className="text-sm font-semibold text-fg">
               Email
             </label>
             <input
@@ -391,12 +391,12 @@ export function SetupAdmin() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-navy-200 bg-white px-4 py-3 text-sm transition focus:border-brand-400 focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm transition focus:border-accent focus:outline-none"
               placeholder="superadmin@example.com"
             />
           </div>
           <div>
-            <label htmlFor="su-password" className="text-sm font-semibold text-navy-900">
+            <label htmlFor="su-password" className="text-sm font-semibold text-fg">
               Password
             </label>
             <input
@@ -406,18 +406,18 @@ export function SetupAdmin() {
               autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-navy-200 bg-white px-4 py-3 text-sm transition focus:border-brand-400 focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm transition focus:border-accent focus:outline-none"
               placeholder="12+ characters"
             />
             <p className="mt-1.5 text-xs">
-              <span className="font-medium text-navy-700">
+              <span className="font-medium text-fg-muted">
                 Strength:
               </span>{" "}
               <span
                 className={
                   strongEnough
                     ? "font-semibold text-emerald-600"
-                    : "text-navy-500"
+                    : "text-fg-subtle"
                 }
               >
                 {strongEnough
@@ -427,7 +427,7 @@ export function SetupAdmin() {
             </p>
           </div>
           <div>
-            <label htmlFor="su-confirm" className="text-sm font-semibold text-navy-900">
+            <label htmlFor="su-confirm" className="text-sm font-semibold text-fg">
               Confirm password
             </label>
             <input
@@ -437,14 +437,14 @@ export function SetupAdmin() {
               autoComplete="new-password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
-              className="mt-1.5 w-full rounded-xl border border-navy-200 bg-white px-4 py-3 text-sm transition focus:border-brand-400 focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm transition focus:border-accent focus:outline-none"
               placeholder="Repeat password"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover disabled:opacity-60"
           >
             <KeyRound className="h-4 w-4" />
             {loading ? "Creating…" : "Create super admin"}
@@ -457,21 +457,21 @@ export function SetupAdmin() {
 
 export function NotFound() {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-navy-50/60 px-4 py-12">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-surface-2 px-4 py-12">
       <div className="text-center">
-        <p className="font-display text-8xl font-extrabold text-brand-600">
+        <p className="font-display text-8xl font-extrabold text-accent">
           404
         </p>
-        <h1 className="mt-2 font-display text-2xl font-bold text-navy-950">
+        <h1 className="mt-2 font-display text-2xl font-bold text-fg">
           Page not found
         </h1>
-        <p className="mx-auto mt-2 max-w-sm text-sm text-navy-600">
+        <p className="mx-auto mt-2 max-w-sm text-sm text-fg-muted">
           The page you are looking for does not exist or has been
           moved.
         </p>
         <Link
           to="/"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
+          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-6 py-3 text-sm font-bold text-accent-fg transition hover:bg-accent-hover"
         >
           <ArrowLeft className="h-4 w-4" /> Back home
         </Link>
@@ -482,13 +482,13 @@ export function NotFound() {
 
 export function Unauthorized() {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-navy-50/60 px-4 py-12">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-surface-2 px-4 py-12">
       <div className="max-w-md text-center">
         <ShieldCheck className="mx-auto h-14 w-14 text-rose-400" />
-        <h1 className="mt-4 font-display text-2xl font-bold text-navy-950">
+        <h1 className="mt-4 font-display text-2xl font-bold text-fg">
           Access restricted
         </h1>
-        <p className="mt-2 text-sm text-navy-600">
+        <p className="mt-2 text-sm text-fg-muted">
           You need an active admin account to view this page. If
           you were just invited, sign out and sign back in to
           refresh your permissions.
@@ -496,13 +496,13 @@ export function Unauthorized() {
         <div className="mt-6 flex justify-center gap-3">
           <Link
             to="/"
-            className="rounded-xl border border-navy-200 bg-white px-5 py-3 text-sm font-semibold text-navy-800 transition hover:bg-navy-50"
+            className="rounded-xl border border-line bg-surface px-5 py-3 text-sm font-semibold text-fg transition hover:bg-surface-2"
           >
             Home
           </Link>
           <Link
             to="/login"
-            className="rounded-xl bg-brand-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
+            className="rounded-xl bg-accent px-5 py-3 text-sm font-bold text-accent-fg transition hover:bg-accent-hover"
           >
             Sign in
           </Link>

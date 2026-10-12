@@ -22,6 +22,14 @@ export interface Branch {
   created_at: string;
 }
 
+export interface Specialization {
+  id: string;
+  name: string;
+  code: string | null;
+  branch_id: string | null;
+  created_at: string;
+}
+
 export interface Subject {
   id: string;
   branch_id: string;
@@ -74,6 +82,7 @@ export interface Paper {
   };
   branches?: { name: string; code: string | null };
   subjects?: { name: string; code: string | null };
+  specializations?: { name: string; code: string | null };
   related?: Paper[];
 }
 
@@ -87,6 +96,7 @@ export interface PaperListResponse {
 export interface FilterOptions {
   institutions: Institution[];
   branches: Branch[];
+  specializations: Specialization[];
   semesters: number[];
   exam_types: { value: ExamType; label: string }[];
   years: number[];

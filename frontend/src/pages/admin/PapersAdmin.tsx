@@ -106,22 +106,22 @@ export function PapersAdmin() {
       ? "bg-emerald-50 text-emerald-700"
       : s === "draft"
         ? "bg-amber-50 text-amber-700"
-        : "bg-navy-100 text-navy-600";
+        : "bg-surface-2 text-fg-muted";
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-fg sm:text-3xl">
             Papers
           </h1>
-          <p className="mt-1 text-sm text-navy-600">
+          <p className="mt-1 text-sm text-fg-muted">
             {total} total · {papers.filter((p) => p.status === "published").length} on this page published
           </p>
         </div>
         <Link
           to="/admin/papers/upload"
-          className="flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700"
+          className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover"
         >
           <UploadCloud className="h-4 w-4" />
           Upload paper
@@ -136,19 +136,19 @@ export function PapersAdmin() {
             setPage(1);
             load();
           }}
-          className="flex flex-1 items-center gap-2 rounded-xl border border-navy-200 bg-white p-1.5 shadow-soft focus-within:border-brand-400"
+          className="flex flex-1 items-center gap-2 rounded-xl border border-line bg-surface p-1.5 shadow-soft focus-within:border-accent"
           role="search"
         >
-          <Search className="ml-2 h-4.5 w-4.5 shrink-0 text-navy-400" />
+          <Search className="ml-2 h-4.5 w-4.5 shrink-0 text-fg-subtle" />
           <input
             defaultValue={q}
             placeholder="Search subject, paper code, institution…"
-            className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-navy-400"
+            className="w-full bg-transparent px-1 py-2 text-sm outline-none placeholder:text-fg-subtle"
             aria-label="Search papers"
           />
           <button
             type="submit"
-            className="shrink-0 rounded-lg bg-navy-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-navy-800"
+            className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-fg transition hover:bg-accent-hover"
           >
             Search
           </button>
@@ -159,7 +159,7 @@ export function PapersAdmin() {
             setStatus(e.target.value);
             setPage(1);
           }}
-          className="rounded-xl border border-navy-200 bg-white px-3 py-2.5 text-sm shadow-soft focus:border-brand-400 focus:outline-none"
+          className="rounded-xl border border-line bg-surface px-3 py-2.5 text-sm shadow-soft focus:border-accent focus:outline-none"
           aria-label="Filter by status"
         >
           {STATUSES.map((s) => (
@@ -175,7 +175,7 @@ export function PapersAdmin() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="mt-5 overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-soft"
+        className="mt-5 overflow-hidden rounded-2xl border border-line bg-surface shadow-soft"
       >
         {loading ? (
           <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -185,16 +185,16 @@ export function PapersAdmin() {
           </div>
         ) : papers.length === 0 ? (
           <div className="p-14 text-center">
-            <FileText className="mx-auto h-12 w-12 text-navy-200" />
-            <h3 className="mt-4 font-display text-lg font-semibold text-navy-900">
+            <FileText className="mx-auto h-12 w-12 text-fg-muted" />
+            <h3 className="mt-4 font-display text-lg font-semibold text-fg">
               No papers found
             </h3>
-            <p className="mt-1 text-sm text-navy-500">
+            <p className="mt-1 text-sm text-fg-subtle">
               Upload your first question paper to get started.
             </p>
             <Link
               to="/admin/papers/upload"
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-brand-700"
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-accent-hover"
             >
               <UploadCloud className="h-4 w-4" />
               Upload paper
@@ -204,7 +204,7 @@ export function PapersAdmin() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-sm">
               <thead>
-                <tr className="border-b border-navy-100 text-xs uppercase tracking-wider text-navy-400">
+                <tr className="border-b border-line text-xs uppercase tracking-wider text-fg-subtle">
                   <th className="px-5 py-3.5 font-semibold">Paper</th>
                   <th className="px-5 py-3.5 font-semibold">Institution</th>
                   <th className="px-5 py-3.5 font-semibold">Sem</th>
@@ -217,31 +217,31 @@ export function PapersAdmin() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-navy-50">
+              <tbody className="divide-y divide-line">
                 {papers.map((paper) => (
                   <tr
                     key={paper.id}
-                    className="transition hover:bg-navy-50/60"
+                    className="transition hover:bg-surface-2/60"
                   >
                     <td className="max-w-[220px] px-5 py-3.5">
-                      <p className="truncate font-medium text-navy-900">
+                      <p className="truncate font-medium text-fg">
                         {paper.subject_name}
                       </p>
-                      <p className="truncate text-xs text-navy-500">
+                      <p className="truncate text-xs text-fg-subtle">
                         {paper.branches?.name} ·{" "}
                         {paper.page_count} pages ·{" "}
                         {formatBytes(paper.file_size_bytes)}
                       </p>
                     </td>
-                    <td className="px-5 py-3.5 text-navy-700">
+                    <td className="px-5 py-3.5 text-fg-muted">
                       {paper.institutions?.short_name}
                     </td>
-                    <td className="px-5 py-3.5 text-navy-700">
+                    <td className="px-5 py-3.5 text-fg-muted">
                       {paper.semester}
                     </td>
-                    <td className="px-5 py-3.5 text-navy-700">
+                    <td className="px-5 py-3.5 text-fg-muted">
                       {examTypeLabel(paper.exam_type)}{" "}
-                      <span className="text-navy-400">
+                      <span className="text-fg-subtle">
                         {paper.exam_year}
                       </span>
                     </td>
@@ -252,17 +252,17 @@ export function PapersAdmin() {
                         {paper.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 font-semibold text-navy-900">
+                    <td className="px-5 py-3.5 font-semibold text-fg">
                       {paper.download_count}
                     </td>
-                    <td className="px-5 py-3.5 text-xs text-navy-500">
+                    <td className="px-5 py-3.5 text-xs text-fg-subtle">
                       {formatDate(paper.created_at)}
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
                           to={`/papers/${paper.id}/preview`}
-                          className="rounded-lg p-2 text-navy-500 transition hover:bg-brand-50 hover:text-brand-700"
+                          className="rounded-lg p-2 text-fg-subtle transition hover:bg-accent-soft hover:text-accent"
                           aria-label="Preview paper"
                           title="Preview"
                         >
@@ -270,7 +270,7 @@ export function PapersAdmin() {
                         </Link>
                         <Link
                           to={`/admin/papers/${paper.id}/edit`}
-                          className="rounded-lg p-2 text-navy-500 transition hover:bg-brand-50 hover:text-brand-700"
+                          className="rounded-lg p-2 text-fg-subtle transition hover:bg-accent-soft hover:text-accent"
                           aria-label="Edit paper"
                           title="Edit"
                         >
@@ -302,7 +302,7 @@ export function PapersAdmin() {
                         </button>
                         <button
                           onClick={() => setDeleteTarget(paper)}
-                          className="rounded-lg p-2 text-navy-500 transition hover:bg-rose-50 hover:text-rose-700"
+                          className="rounded-lg p-2 text-fg-subtle transition hover:bg-rose-50 hover:text-rose-700"
                           aria-label="Delete paper"
                           title="Delete"
                         >
@@ -324,17 +324,17 @@ export function PapersAdmin() {
           <button
             disabled={page <= 1}
             onClick={() => setPage((p) => p - 1)}
-            className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm font-medium text-navy-700 transition hover:bg-navy-50 disabled:opacity-40"
+            className="rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-surface-2 disabled:opacity-40"
           >
             Prev
           </button>
-          <span className="text-sm text-navy-600">
+          <span className="text-sm text-fg-muted">
             Page {page} of {totalPages}
           </span>
           <button
             disabled={page >= totalPages}
             onClick={() => setPage((p) => p + 1)}
-            className="rounded-lg border border-navy-200 bg-white px-3 py-2 text-sm font-medium text-navy-700 transition hover:bg-navy-50 disabled:opacity-40"
+            className="rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-fg-muted transition hover:bg-surface-2 disabled:opacity-40"
           >
             Next
           </button>
@@ -347,26 +347,26 @@ export function PapersAdmin() {
         onClose={() => setDeleteTarget(null)}
         title="Delete paper"
       >
-        <p className="text-sm text-navy-700">
+        <p className="text-sm text-fg-muted">
           Delete{" "}
           <strong>{deleteTarget?.subject_name}</strong> (
           {deleteTarget?.institutions?.short_name}, Sem{" "}
           {deleteTarget?.semester}, {deleteTarget?.exam_year})?
         </p>
-        <p className="mt-2 text-sm text-navy-500">
+        <p className="mt-2 text-sm text-fg-subtle">
           Both the original and the watermarked PDF will be
           removed from storage. This cannot be undone.
         </p>
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setDeleteTarget(null)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={confirmDelete}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-700"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-rose-700"
           >
             <Trash2 className="h-4 w-4" />
             Delete permanently

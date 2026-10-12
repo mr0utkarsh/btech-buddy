@@ -176,23 +176,23 @@ export function UploadPaper() {
     `mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm transition focus:outline-none ${
       hasError
         ? "border-rose-300 bg-rose-50"
-        : "border-navy-200 bg-white focus:border-brand-400"
+        : "border-line bg-surface focus:border-accent"
     }`;
 
-  const labelClass = "text-sm font-semibold text-navy-900";
+  const labelClass = "text-sm font-semibold text-fg";
 
   return (
     <div className="mx-auto max-w-3xl">
       <Link
         to="/admin/papers"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-navy-600 transition hover:text-brand-700"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted transition hover:text-accent"
       >
         <ArrowLeft className="h-4 w-4" /> Back to papers
       </Link>
-      <h1 className="mt-3 font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+      <h1 className="mt-3 font-display text-2xl font-bold text-fg sm:text-3xl">
         Upload question paper
       </h1>
-      <p className="mt-1 text-sm text-navy-600">
+      <p className="mt-1 text-sm text-fg-muted">
         The PDF is validated, watermarked with "BTech Buddy"
         on every page, and stored securely.
       </p>
@@ -202,7 +202,7 @@ export function UploadPaper() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="mt-6 rounded-3xl border border-navy-100 bg-white p-6 shadow-lift sm:p-8"
+        className="mt-6 rounded-3xl border border-line bg-surface p-6 shadow-lift sm:p-8"
         noValidate
       >
         <div className="grid gap-5 sm:grid-cols-2">
@@ -325,7 +325,7 @@ export function UploadPaper() {
 
           <div>
             <label htmlFor="up-papercode" className={labelClass}>
-              Paper code <span className="font-normal text-navy-400">(optional)</span>
+              Paper code <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               id="up-papercode"
@@ -341,7 +341,7 @@ export function UploadPaper() {
         {/* Subject */}
         <div className="mt-5">
           <label htmlFor="up-subject" className={labelClass}>
-            Subject <span className="font-normal text-navy-400">(from catalog)</span>
+            Subject <span className="font-normal text-fg-subtle">(from catalog)</span>
           </label>
           <select
             id="up-subject"
@@ -385,7 +385,7 @@ export function UploadPaper() {
           </div>
           <div>
             <label htmlFor="up-subjectcode" className={labelClass}>
-              Subject code <span className="font-normal text-navy-400">(optional)</span>
+              Subject code <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               id="up-subjectcode"
@@ -422,10 +422,10 @@ export function UploadPaper() {
             aria-label="Upload PDF"
             className={`mt-1.5 flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-10 text-center transition ${
               dragOver
-                ? "border-brand-500 bg-brand-50"
+                ? "border-accent bg-accent-soft"
                 : errors.file
                   ? "border-rose-300 bg-rose-50"
-                  : "border-navy-200 bg-navy-50/50 hover:border-brand-400 hover:bg-brand-50/40"
+                  : "border-line bg-surface-2/50 hover:border-accent hover:bg-accent-soft/40"
             }`}
           >
             <input
@@ -440,7 +440,7 @@ export function UploadPaper() {
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
                   <CheckCircle2 className="h-6 w-6" />
                 </span>
-                <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-navy-900">
+                <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-fg">
                   <FileText className="h-4 w-4" />
                   {file.name}
                   <button
@@ -449,28 +449,28 @@ export function UploadPaper() {
                       e.stopPropagation();
                       setFile(null);
                     }}
-                    className="rounded-full p-1 hover:bg-white"
+                    className="rounded-full p-1 hover:bg-surface"
                     aria-label="Remove file"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </p>
-                <p className="mt-1 text-xs text-navy-500">
+                <p className="mt-1 text-xs text-fg-subtle">
                   {(file.size / 1024 / 1024).toFixed(2)} MB
                 </p>
               </>
             ) : (
               <>
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent">
                   <UploadCloud className="h-6 w-6" />
                 </span>
-                <p className="mt-3 text-sm font-semibold text-navy-900">
+                <p className="mt-3 text-sm font-semibold text-fg">
                   Drop your PDF here or{" "}
-                  <span className="text-brand-700 underline">
+                  <span className="text-accent underline">
                     browse files
                   </span>
                 </p>
-                <p className="mt-1 text-xs text-navy-500">
+                <p className="mt-1 text-xs text-fg-subtle">
                   PDF only · up to 50 MB · up to 300 pages
                 </p>
               </>
@@ -485,12 +485,12 @@ export function UploadPaper() {
         </div>
 
         {/* Publish toggle */}
-        <label className="mt-5 flex cursor-pointer items-center justify-between rounded-xl border border-navy-100 bg-navy-50/60 px-4 py-3.5">
+        <label className="mt-5 flex cursor-pointer items-center justify-between rounded-xl border border-line bg-surface-2 px-4 py-3.5">
           <span>
-            <span className="block text-sm font-semibold text-navy-900">
+            <span className="block text-sm font-semibold text-fg">
               Publish immediately
             </span>
-            <span className="block text-xs text-navy-500">
+            <span className="block text-xs text-fg-subtle">
               Uncheck to save as draft for later review
             </span>
           </span>
@@ -502,29 +502,29 @@ export function UploadPaper() {
               className="peer sr-only"
               aria-label="Publish immediately"
             />
-            <span className="block h-6 w-11 rounded-full bg-navy-300 transition peer-checked:bg-brand-600" />
-            <span className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5" />
+            <span className="block h-6 w-11 rounded-full bg-line-strong transition peer-checked:bg-accent" />
+            <span className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-surface shadow transition peer-checked:translate-x-5" />
           </span>
         </label>
 
         {/* Progress */}
         {uploading && (
           <div className="mt-5">
-            <div className="flex items-center justify-between text-xs font-semibold text-navy-700">
+            <div className="flex items-center justify-between text-xs font-semibold text-fg-muted">
               <span className="flex items-center gap-2">
-                <span className="h-2 w-2 animate-ping rounded-full bg-brand-500" />
+                <span className="h-2 w-2 animate-ping rounded-full bg-accent" />
                 Uploading & watermarking…
               </span>
               <span>{progress}%</span>
             </div>
-            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-navy-100">
+            <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface-2">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-brand-600 to-sky-400"
+                className="h-full rounded-full bg-gradient-to-r from-accent to-sky-400"
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.2 }}
               />
             </div>
-            <p className="mt-1.5 text-xs text-navy-500">
+            <p className="mt-1.5 text-xs text-fg-subtle">
               After upload, every page is stamped with the
               BTech Buddy watermark automatically.
             </p>
@@ -534,7 +534,7 @@ export function UploadPaper() {
         <button
           type="submit"
           disabled={submitting}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-60"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-6 py-3.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover disabled:opacity-60"
         >
           <UploadCloud className="h-4 w-4" />
           {submitting ? "Uploading…" : "Upload & process PDF"}

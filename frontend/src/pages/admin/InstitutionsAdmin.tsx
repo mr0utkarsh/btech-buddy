@@ -23,12 +23,12 @@ const TYPE_META: Record<
   university: {
     label: "University",
     icon: University,
-    color: "bg-brand-50 text-brand-700",
+    color: "bg-accent-soft text-accent",
   },
   college: {
     label: "College",
     icon: GraduationCap,
-    color: "bg-navy-50 text-navy-700",
+    color: "bg-surface-2 text-fg-muted",
   },
   institute: {
     label: "Institute",
@@ -197,18 +197,18 @@ export function InstitutionsAdmin() {
     `mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm transition focus:outline-none ${
       hasError
         ? "border-rose-300 bg-rose-50"
-        : "border-navy-200 bg-white focus:border-brand-400"
+        : "border-line bg-surface focus:border-accent"
     }`;
-  const labelClass = "text-sm font-semibold text-navy-900";
+  const labelClass = "text-sm font-semibold text-fg";
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold text-fg sm:text-3xl">
             Institutions
           </h1>
-          <p className="mt-1 text-sm text-navy-600">
+          <p className="mt-1 text-sm text-fg-muted">
             {institutions.length} institutions ·{" "}
             {universities.length} universities ·{" "}
             {institutions.length - universities.length} colleges
@@ -217,7 +217,7 @@ export function InstitutionsAdmin() {
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700"
+          className="flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover"
         >
           <Plus className="h-4 w-4" />
           Add institution
@@ -237,8 +237,8 @@ export function InstitutionsAdmin() {
             onClick={() => setFilter(t.value as "" | InstitutionType)}
             className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
               filter === t.value
-                ? "bg-navy-900 text-white"
-                : "border border-navy-200 bg-white text-navy-700 hover:bg-navy-50"
+                ? "bg-accent text-accent-fg"
+                : "border border-line bg-surface text-fg-muted hover:bg-surface-2"
             }`}
           >
             {t.label}
@@ -252,7 +252,7 @@ export function InstitutionsAdmin() {
           ? Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="h-44 animate-pulse rounded-2xl border border-navy-100 bg-white shadow-soft"
+                className="h-44 animate-pulse rounded-2xl border border-line bg-surface shadow-soft"
               />
             ))
           : filtered.map((inst, i) => {
@@ -266,7 +266,7 @@ export function InstitutionsAdmin() {
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                  className="group flex flex-col rounded-2xl border border-navy-100 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
+                  className="group flex flex-col rounded-2xl border border-line bg-surface p-5 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <span
@@ -280,18 +280,18 @@ export function InstitutionsAdmin() {
                       {meta.label}
                     </span>
                   </div>
-                  <h3 className="mt-3 font-display text-base font-semibold leading-snug text-navy-950">
+                  <h3 className="mt-3 font-display text-base font-semibold leading-snug text-fg">
                     {inst.name}
                   </h3>
-                  <p className="mt-1 text-xs text-navy-500">
+                  <p className="mt-1 text-xs text-fg-subtle">
                     {inst.city}, {inst.state}
                     {inst.established_year
                       ? ` · est. ${inst.established_year}`
                       : ""}
                   </p>
                   {inst.type !== "university" && (
-                    <p className="mt-1.5 flex items-center gap-1 text-xs text-navy-600">
-                      <University className="h-3.5 w-3.5 text-brand-600" />
+                    <p className="mt-1.5 flex items-center gap-1 text-xs text-fg-muted">
+                      <University className="h-3.5 w-3.5 text-accent" />
                       Affiliated to:{" "}
                       <span className="font-medium">
                         {affiliation?.short_name || "—"}
@@ -303,7 +303,7 @@ export function InstitutionsAdmin() {
                       className={`flex items-center gap-1 text-xs font-semibold ${
                         inst.verified
                           ? "text-emerald-600"
-                          : "text-navy-400"
+                          : "text-fg-subtle"
                       }`}
                     >
                       {inst.verified ? (
@@ -321,14 +321,14 @@ export function InstitutionsAdmin() {
                     <div className="flex gap-1 opacity-0 transition group-hover:opacity-100">
                       <button
                         onClick={() => openEdit(inst)}
-                        className="rounded-lg p-2 text-navy-500 transition hover:bg-brand-50 hover:text-brand-700"
+                        className="rounded-lg p-2 text-fg-subtle transition hover:bg-accent-soft hover:text-accent"
                         aria-label={`Edit ${inst.name}`}
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => setDeleting(inst)}
-                        className="rounded-lg p-2 text-navy-500 transition hover:bg-rose-50 hover:text-rose-700"
+                        className="rounded-lg p-2 text-fg-subtle transition hover:bg-rose-50 hover:text-rose-700"
                         aria-label={`Delete ${inst.name}`}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -392,7 +392,7 @@ export function InstitutionsAdmin() {
               <option value="college">College</option>
               <option value="institute">Institute</option>
             </select>
-            <p className="mt-1 text-xs text-navy-400">
+            <p className="mt-1 text-xs text-fg-subtle">
               Universities award degrees; colleges/institutes are
               affiliated to a university.
             </p>
@@ -417,7 +417,7 @@ export function InstitutionsAdmin() {
                   {errors.affiliated_to}
                 </p>
               )}
-              <p className="mt-1 text-xs text-navy-400">
+              <p className="mt-1 text-xs text-fg-subtle">
                 Verify the affiliation with the university before marking
                 verified.
               </p>
@@ -441,7 +441,7 @@ export function InstitutionsAdmin() {
           </div>
           <div>
             <label className={labelClass}>
-              Website <span className="font-normal text-navy-400">(optional)</span>
+              Website <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               value={form.website}
@@ -455,7 +455,7 @@ export function InstitutionsAdmin() {
           </div>
           <div>
             <label className={labelClass}>
-              Established <span className="font-normal text-navy-400">(optional)</span>
+              Established <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               value={form.established_year}
@@ -469,12 +469,12 @@ export function InstitutionsAdmin() {
               </p>
             )}
           </div>
-          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-navy-100 bg-navy-50/60 px-4 py-3.5 sm:col-span-2">
+          <label className="flex cursor-pointer items-center justify-between rounded-xl border border-line bg-surface-2 px-4 py-3.5 sm:col-span-2">
             <span>
-              <span className="block text-sm font-semibold text-navy-900">
+              <span className="block text-sm font-semibold text-fg">
                 Verified institution
               </span>
-              <span className="block text-xs text-navy-500">
+              <span className="block text-xs text-fg-subtle">
                 Only mark verified after confirming authenticity
               </span>
             </span>
@@ -486,22 +486,22 @@ export function InstitutionsAdmin() {
                 className="peer sr-only"
                 aria-label="Verified institution"
               />
-              <span className="block h-6 w-11 rounded-full bg-navy-300 transition peer-checked:bg-brand-600" />
-              <span className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5" />
+              <span className="block h-6 w-11 rounded-full bg-line-strong transition peer-checked:bg-accent" />
+              <span className="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-surface shadow transition peer-checked:translate-x-5" />
             </span>
           </label>
         </div>
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setModalOpen(false)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={save}
             disabled={saving}
-            className="flex-1 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-accent px-4 py-2.5 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover disabled:opacity-60"
           >
             {saving ? "Saving…" : editing ? "Save changes" : "Add institution"}
           </button>
@@ -514,10 +514,10 @@ export function InstitutionsAdmin() {
         onClose={() => setDeleting(null)}
         title="Delete institution"
       >
-        <p className="text-sm text-navy-700">
+        <p className="text-sm text-fg-muted">
           Delete <strong>{deleting?.name}</strong>?
         </p>
-        <p className="mt-2 text-sm text-navy-500">
+        <p className="mt-2 text-sm text-fg-subtle">
           Deletion is blocked while question papers belong to
           this institution. Affiliated colleges will be
           unlinked.
@@ -525,13 +525,13 @@ export function InstitutionsAdmin() {
         <div className="mt-6 flex gap-2">
           <button
             onClick={() => setDeleting(null)}
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-2.5 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </button>
           <button
             onClick={confirmDelete}
-            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-700"
+            className="flex-1 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-bold text-accent-fg transition hover:bg-rose-700"
           >
             Delete
           </button>

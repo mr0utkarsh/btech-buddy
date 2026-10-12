@@ -160,14 +160,14 @@ export function EditPaper() {
     `mt-1.5 w-full rounded-xl border px-3.5 py-2.5 text-sm transition focus:outline-none ${
       hasError
         ? "border-rose-300 bg-rose-50"
-        : "border-navy-200 bg-white focus:border-brand-400"
+        : "border-line bg-surface focus:border-accent"
     }`;
-  const labelClass = "text-sm font-semibold text-navy-900";
+  const labelClass = "text-sm font-semibold text-fg";
 
   if (!paper) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-200 border-t-brand-600" />
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-accent-soft border-t-accent" />
       </div>
     );
   }
@@ -176,14 +176,14 @@ export function EditPaper() {
     <div className="mx-auto max-w-3xl">
       <Link
         to="/admin/papers"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-navy-600 transition hover:text-brand-700"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted transition hover:text-accent"
       >
         <ArrowLeft className="h-4 w-4" /> Back to papers
       </Link>
-      <h1 className="mt-3 font-display text-2xl font-bold text-navy-950 sm:text-3xl">
+      <h1 className="mt-3 font-display text-2xl font-bold text-fg sm:text-3xl">
         Edit paper
       </h1>
-      <p className="mt-1 text-sm text-navy-600">
+      <p className="mt-1 text-sm text-fg-muted">
         {paper.subject_name} · uploaded{" "}
         {new Date(paper.created_at).toLocaleDateString("en-IN")}
       </p>
@@ -193,7 +193,7 @@ export function EditPaper() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="mt-6 rounded-3xl border border-navy-100 bg-white p-6 shadow-lift sm:p-8"
+        className="mt-6 rounded-3xl border border-line bg-surface p-6 shadow-lift sm:p-8"
         noValidate
       >
         <div className="grid gap-5 sm:grid-cols-2">
@@ -281,7 +281,7 @@ export function EditPaper() {
           </div>
           <div>
             <label className={labelClass}>
-              Paper code <span className="font-normal text-navy-400">(optional)</span>
+              Paper code <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               type="text"
@@ -294,7 +294,7 @@ export function EditPaper() {
 
         <div className="mt-5">
           <label className={labelClass}>
-            Subject <span className="font-normal text-navy-400">(catalog)</span>
+            Subject <span className="font-normal text-fg-subtle">(catalog)</span>
           </label>
           <select
             value={form.subject_id}
@@ -328,7 +328,7 @@ export function EditPaper() {
           </div>
           <div>
             <label className={labelClass}>
-              Subject code <span className="font-normal text-navy-400">(optional)</span>
+              Subject code <span className="font-normal text-fg-subtle">(optional)</span>
             </label>
             <input
               type="text"
@@ -342,7 +342,7 @@ export function EditPaper() {
         {/* Replace file */}
         <div className="mt-5">
           <label className={labelClass}>
-            Replace PDF <span className="font-normal text-navy-400">(optional)</span>
+            Replace PDF <span className="font-normal text-fg-subtle">(optional)</span>
           </label>
           <div
             onClick={() => fileInput.current?.click()}
@@ -352,7 +352,7 @@ export function EditPaper() {
             role="button"
             tabIndex={0}
             aria-label="Replace PDF"
-            className="mt-1.5 flex cursor-pointer items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-navy-200 bg-navy-50/50 px-6 py-6 transition hover:border-brand-400 hover:bg-brand-50/40"
+            className="mt-1.5 flex cursor-pointer items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-line bg-surface-2/50 px-6 py-6 transition hover:border-accent hover:bg-accent-soft/40"
           >
             <input
               ref={fileInput}
@@ -364,10 +364,10 @@ export function EditPaper() {
             {replaceFile ? (
               <>
                 <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                <span className="text-sm font-semibold text-navy-900">
+                <span className="text-sm font-semibold text-fg">
                   {replaceFile.name}
                 </span>
-                <span className="text-xs text-navy-500">
+                <span className="text-xs text-fg-subtle">
                   ({(replaceFile.size / 1024 / 1024).toFixed(2)} MB)
                 </span>
                 <button
@@ -376,7 +376,7 @@ export function EditPaper() {
                     e.stopPropagation();
                     setReplaceFile(null);
                   }}
-                  className="rounded-full p-1 hover:bg-white"
+                  className="rounded-full p-1 hover:bg-surface"
                   aria-label="Remove file"
                 >
                   <X className="h-4 w-4" />
@@ -384,8 +384,8 @@ export function EditPaper() {
               </>
             ) : (
               <>
-                <UploadCloud className="h-5 w-5 text-brand-600" />
-                <span className="text-sm font-medium text-navy-700">
+                <UploadCloud className="h-5 w-5 text-accent" />
+                <span className="text-sm font-medium text-fg-muted">
                   Choose a new PDF to re-watermark and replace
                 </span>
               </>
@@ -399,23 +399,23 @@ export function EditPaper() {
           )}
           {replacing && (
             <div className="mt-3">
-              <div className="flex items-center justify-between text-xs font-semibold text-navy-700">
+              <div className="flex items-center justify-between text-xs font-semibold text-fg-muted">
                 <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 animate-ping rounded-full bg-brand-500" />
+                  <span className="h-2 w-2 animate-ping rounded-full bg-accent" />
                   Re-processing…
                 </span>
                 <span>{progress}%</span>
               </div>
-              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-navy-100">
+              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-surface-2">
                 <motion.div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-600 to-sky-400"
+                  className="h-full rounded-full bg-gradient-to-r from-accent to-sky-400"
                   animate={{ width: `${progress}%` }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
             </div>
           )}
-          <p className="mt-2 flex items-center gap-1.5 text-xs text-navy-500">
+          <p className="mt-2 flex items-center gap-1.5 text-xs text-fg-subtle">
             <FileText className="h-3.5 w-3.5" />
             Current file: {paper.page_count} pages ·{" "}
             {(paper.file_size_bytes / 1024 / 1024).toFixed(2)} MB
@@ -425,14 +425,14 @@ export function EditPaper() {
         <div className="mt-6 flex gap-2">
           <Link
             to="/admin/papers"
-            className="flex-1 rounded-xl border border-navy-200 px-4 py-3 text-sm font-semibold text-navy-700 transition hover:bg-navy-50"
+            className="flex-1 rounded-xl border border-line px-4 py-3 text-sm font-semibold text-fg-muted transition hover:bg-surface-2"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={saving}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-3 text-sm font-bold text-white shadow-soft transition hover:bg-brand-700 disabled:opacity-60"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-bold text-accent-fg shadow-soft transition hover:bg-accent-hover disabled:opacity-60"
           >
             <Save className="h-4 w-4" />
             {saving ? "Saving…" : "Save changes"}

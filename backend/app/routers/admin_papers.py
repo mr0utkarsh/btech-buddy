@@ -9,6 +9,11 @@ from fastapi import APIRouter, Depends, Header, UploadFile, File, Form, Request
 
 from app.audit import log_activity, new_uuid
 from app.auth import require_admin
+from app.catalog import (
+    ALLOWED_BRANCH_CODE,
+    ALLOWED_SPECIALIZATIONS,
+    ALLOWED_UNIVERSITY_SHORT_NAME,
+)
 from app.config import settings
 from app.database import (
     SupabaseError,
@@ -53,6 +58,7 @@ async def upload_paper(
     subject_name: Optional[str] = Form(None),
     subject_code: Optional[str] = Form(""),
     paper_code: Optional[str] = Form(""),
+    specialization_id: Optional[str] = Form(None),
     publish: str = Form("false"),
     file: UploadFile = File(...),
     ctx: Dict[str, Any] = Depends(admin_ctx),
@@ -85,9 +91,42 @@ async def upload_paper(
     )
     if not institution:
         raise BadRequestError("Selected institution does not exist")
+    # Customer catalog: only SMVDU is allowed.
+    if institution.get("short_name") != ALLOWED_UNIVERSITY_SHORT_NAME:
+        raise BadRequestError(
+            "Only Shri Mata Vaishno Devi University (SMVDU) is supported"
+        )
     branch = await select_one("branches", params={"id": f"eq.{branch_id}"})
     if not branch:
         raise BadRequestError("Selected branch does not exist")
+    # Customer catalog: only the CSE branch is allowed.
+    if branch.get("code") != ALLOWED_BRANCH_CODE:
+        raise BadRequestError("Only the CSE branch is supported")
+
+    # Optional specialization — must resolve to "AI and Robotics".
+    resolved_specialization_id = None
+    try:
+        if specialization_id:
+            spec = await select_one(
+                "specializations", params={"id": f"eq.{specialization_id}"}
+            )
+            if not spec or spec.get("name") not in ALLOWED_SPECIALIZATIONS:
+                raise BadRequestError("Invalid specialization selection")
+            resolved_specialization_id = specialization_id
+        else:
+            # Default to the single allowed specialization.
+            spec = await select_one(
+                "specializations",
+                params={"name": f"eq.{ALLOWED_SPECIALIZATIONS[0]}"},
+            )
+            if spec:
+                resolved_specialization_id = spec["id"]
+    except BadRequestError:
+        raise
+    except Exception:
+        # specializations table/column may not exist yet (migration 0006 not
+        # applied). Skip specialization rather than failing the upload.
+        resolved_specialization_id = None
 
     # Resolve subject: either pick from catalog or free-text entry.
     resolved_subject_name = None
@@ -165,6 +204,12 @@ async def upload_paper(
         from datetime import datetime, timezone
 
         row["published_at"] = datetime.now(timezone.utc).isoformat()
+
+    # Only include specialization_id when we resolved one AND the column
+    # exists (migration 0006). If the column is absent, omit it so uploads
+    # keep working until the migration is applied.
+    if resolved_specialization_id:
+        row["specialization_id"] = resolved_specialization_id
 
     paper = await insert_row("papers", row)
     await log_activity(

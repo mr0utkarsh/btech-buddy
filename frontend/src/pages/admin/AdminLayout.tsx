@@ -37,8 +37,8 @@ export function AdminLayout() {
 
   if (adminLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-navy-50/60">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-brand-200 border-t-brand-600" />
+      <div className="flex min-h-screen items-center justify-center bg-surface-2">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-accent-soft border-t-accent" />
       </div>
     );
   }
@@ -57,7 +57,7 @@ export function AdminLayout() {
       <div className="flex items-center justify-between px-5 py-5">
         <Logo size="sm" />
         <button
-          className="rounded-lg p-1.5 text-navy-500 hover:bg-navy-50 lg:hidden"
+          className="rounded-lg p-1.5 text-fg-subtle hover:bg-surface-2 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-label="Close menu"
         >
@@ -74,8 +74,8 @@ export function AdminLayout() {
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition ${
                 isActive
-                  ? "bg-gradient-to-r from-brand-600 to-navy-700 text-white shadow-soft"
-                  : "text-navy-700 hover:bg-navy-50 hover:text-navy-950"
+                  ? "bg-gradient-to-r from-accent to-fg text-accent-fg shadow-soft"
+                  : "text-fg-muted hover:bg-surface-2 hover:text-fg"
               }`
             }
           >
@@ -84,19 +84,19 @@ export function AdminLayout() {
           </NavLink>
         ))}
       </nav>
-      <div className="border-t border-navy-100 p-3">
-        <div className="mb-2 rounded-xl bg-navy-50 px-3.5 py-2.5">
-          <p className="flex items-center gap-1.5 text-xs font-semibold capitalize text-navy-800">
-            <BookOpenCheck className="h-3.5 w-3.5 text-brand-600" />
+      <div className="border-t border-line p-3">
+        <div className="mb-2 rounded-xl bg-surface-2 px-3.5 py-2.5">
+          <p className="flex items-center gap-1.5 text-xs font-semibold capitalize text-fg">
+            <BookOpenCheck className="h-3.5 w-3.5 text-accent" />
             {role === "super_admin" ? "Super Admin" : "Admin"}
           </p>
-          <p className="truncate text-xs text-navy-500">
+          <p className="truncate text-xs text-fg-subtle">
             {user.email}
           </p>
         </div>
         <button
           onClick={handleSignOut}
-          className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-navy-700 transition hover:bg-rose-50 hover:text-rose-700"
+          className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-fg-muted transition hover:bg-rose-50 hover:text-rose-700"
         >
           <LogOut className="h-5 w-5" />
           Sign out
@@ -106,9 +106,9 @@ export function AdminLayout() {
   );
 
   return (
-    <div className="flex min-h-screen bg-navy-50/60">
+    <div className="flex min-h-screen bg-surface-2">
       {/* Desktop sidebar */}
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-navy-100 bg-white shadow-soft lg:block">
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-line bg-surface shadow-soft lg:block">
         {sidebar}
       </aside>
 
@@ -119,7 +119,7 @@ export function AdminLayout() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] bg-navy-950/60 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-[70] bg-scrim backdrop-blur-sm lg:hidden"
             onClick={() => setSidebarOpen(false)}
           >
             <motion.aside
@@ -128,7 +128,7 @@ export function AdminLayout() {
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="h-full w-72 max-w-[85vw] bg-white shadow-lift"
+              className="h-full w-72 max-w-[85vw] bg-surface shadow-lift"
             >
               {sidebar}
             </motion.aside>
@@ -138,15 +138,15 @@ export function AdminLayout() {
 
       {/* Main */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-navy-100 bg-white/90 px-4 backdrop-blur-xl sm:px-6">
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-line bg-header px-4 backdrop-blur-xl sm:px-6">
           <button
-            className="rounded-lg p-2 text-navy-700 hover:bg-navy-50 lg:hidden"
+            className="rounded-lg p-2 text-fg-muted hover:bg-surface-2 lg:hidden"
             onClick={() => setSidebarOpen(true)}
             aria-label="Open admin menu"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <p className="font-display text-sm font-semibold text-navy-950 sm:text-base">
+          <p className="font-display text-sm font-semibold text-fg sm:text-base">
             Admin Panel
           </p>
           <span className="hidden items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 sm:flex">
