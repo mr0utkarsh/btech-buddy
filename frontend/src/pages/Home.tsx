@@ -373,7 +373,10 @@ export function Home() {
       </section>
 
       {/* -------------------------------------- Mid-Sem / End-Sem quick links */}
-      <section aria-labelledby="exam-heading">
+      <section
+        aria-labelledby="exam-heading"
+        className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8"
+      >
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             Exam categories
