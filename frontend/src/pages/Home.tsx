@@ -312,8 +312,11 @@ export function Home() {
       </section>
 
       {/* ------------------------------------------------ Browse by year */}
-      <section aria-labelledby="years-heading">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+      <section
+        aria-labelledby="years-heading"
+        className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8"
+      >
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
               Past papers
@@ -336,7 +339,7 @@ export function Home() {
           </Link>
         </div>
         {filters && filters.years.length > 0 ? (
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap justify-center gap-3 md:mt-8 md:justify-start">
             {filters.years.map((y, i) => (
               <motion.div
                 key={y}
@@ -347,7 +350,7 @@ export function Home() {
               >
                 <Link
                   to={`/browse?year=${y}`}
-                  className="group flex h-20 w-24 flex-col items-center justify-center rounded-2xl border border-line bg-surface shadow-soft transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lift"
+                  className="group flex min-h-[80px] w-24 flex-col items-center justify-center rounded-2xl border border-line bg-surface px-2 py-3 shadow-soft transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lift"
                 >
                   <span className="font-display text-xl font-bold text-fg group-hover:text-accent">
                     {y}
